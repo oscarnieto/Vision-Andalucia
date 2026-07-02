@@ -6,9 +6,12 @@ import { SECTORES } from '../lib/sectors';
   <div class="cabecera__linea">
     <div class="contenedor cabecera__barra">
       <a href="/" class="logo" aria-label="Visión Andalucía — inicio">
-        <span class="logo__marca">Visión</span>
-        <span class="logo__sep" aria-hidden="true"></span>
-        <span class="logo__region">Andalucía</span>
+        <img
+          src="/uploads/logo-vision-andalucia.svg"
+          alt="Visión Andalucía"
+          width="260"
+          height="22"
+        />
       </a>
 
       <button
@@ -67,27 +70,15 @@ import { SECTORES } from '../lib/sectors';
     min-height: 60px;
   }
 
-  /* ---- Logo (wordmark) ---- */
+  /* ---- Logo (wordmark VISIÓN | ANDALUCÍA) ---- */
   .logo {
     display: inline-flex;
     align-items: center;
-    gap: 0.6rem;
-    font-family: var(--fuente-texto);
-    text-transform: uppercase;
-    letter-spacing: 0.14em;
-    font-size: clamp(0.85rem, 2.5vw, 1.1rem);
-    line-height: 1;
+    line-height: 0;
   }
-  .logo__marca {
-    font-weight: 700;
-  }
-  .logo__region {
-    font-weight: 400;
-  }
-  .logo__sep {
-    width: 1px;
-    height: 1.1em;
-    background: var(--color-borde);
+  .logo img {
+    height: clamp(18px, 4.5vw, 24px);
+    width: auto;
   }
 
   /* ---- Barra de sectores (desktop) ---- */
