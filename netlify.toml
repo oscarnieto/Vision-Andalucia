@@ -1,0 +1,18 @@
+# Configuración de despliegue en Netlify.
+# Netlify detecta Astro automáticamente, pero fijamos los valores para que el
+# primer despliegue no falle y sea reproducible.
+
+[build]
+  command = "npm run build"
+  publish = "dist"
+
+[build.environment]
+  # Astro 5 requiere Node 18.20.8+ o 20+. Fijamos una versión estable.
+  NODE_VERSION = "20"
+
+# Cabeceras básicas de seguridad para todo el sitio.
+[[headers]]
+  for = "/*"
+  [headers.values]
+    X-Content-Type-Options = "nosniff"
+    Referrer-Policy = "strict-origin-when-cross-origin"
