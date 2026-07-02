@@ -1,0 +1,44 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import NoticiaCard from '../../components/NoticiaCard.astro';
+import { SECTORES, getSector } from '../../lib/sectors';
+import { getPorSector } from '../../lib/noticias';
+
+export async function getStaticPaths() {
+  return SECTORES.map((s) => ({ params: { sector: s.id } }));
+}
+
+const { sector: sectorId } = Astro.params;
+const sector = getSector(sectorId!)!;
+const noticias = await getPorSector(sectorId!);
+---
+
+<BaseLayout titulo={sector.label} descripcion={sector.descripcion}>
+  <div class="seccion">
+    <div class="seccion__titulo">
+      <h2>{sector.label}</h2>
+    </div>
+    <p class="sector__desc">{sector.descripcion}</p>
+
+    {
+      noticias.length > 0 ? (
+        <div class="grid-noticias">
+          {noticias.map((n) => (
+            <NoticiaCard noticia={n} />
+          ))}
+        </div>
+      ) : (
+        <p>Todavía no hay noticias en este sector.</p>
+      )
+    }
+  </div>
+</BaseLayout>
+
+<style>
+  .sector__desc {
+    color: var(--color-texto-suave);
+    margin-top: -0.75rem;
+    margin-bottom: 1.5rem;
+    max-width: 60ch;
+  }
+</style>

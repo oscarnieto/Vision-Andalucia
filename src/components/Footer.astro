@@ -1,0 +1,76 @@
+---
+import { SECTORES } from '../lib/sectors';
+const anio = new Date().getFullYear();
+---
+
+<footer class="pie">
+  <div class="contenedor pie__inner">
+    <div>
+      <p class="pie__logo">Vision<span>Andalucia</span></p>
+      <p class="pie__nota">
+        Noticias y actualidad de los sectores clave de Andalucía.
+      </p>
+    </div>
+    <nav aria-label="Sectores (pie)">
+      <ul class="pie__nav">
+        {
+          SECTORES.map((s) => (
+            <li>
+              <a href={`/sector/${s.id}/`}>{s.label}</a>
+            </li>
+          ))
+        }
+      </ul>
+    </nav>
+  </div>
+  <div class="contenedor pie__legal">
+    <span>© {anio} Vision Andalucia</span>
+    <a href="/rss.xml">RSS</a>
+  </div>
+</footer>
+
+<style>
+  .pie {
+    margin-top: 4rem;
+    border-top: 1px solid var(--color-borde);
+    background: var(--color-superficie);
+    padding-block: 2.5rem 1.5rem;
+  }
+  .pie__inner {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    gap: 2rem;
+  }
+  .pie__logo {
+    font-family: var(--fuente-titulos);
+    font-weight: 700;
+    font-size: 1.25rem;
+    margin: 0;
+  }
+  .pie__logo span {
+    color: var(--color-primario);
+  }
+  .pie__nota {
+    color: var(--color-texto-suave);
+    margin: 0.25rem 0 0;
+    max-width: 32ch;
+  }
+  .pie__nav {
+    display: grid;
+    grid-template-columns: repeat(2, auto);
+    gap: 0.5rem 1.5rem;
+    list-style: none;
+    margin: 0;
+    padding: 0;
+  }
+  .pie__legal {
+    display: flex;
+    justify-content: space-between;
+    margin-top: 2rem;
+    padding-top: 1rem;
+    border-top: 1px solid var(--color-borde);
+    font-size: 0.85rem;
+    color: var(--color-texto-suave);
+  }
+</style>

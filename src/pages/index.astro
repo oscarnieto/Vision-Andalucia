@@ -1,0 +1,64 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import NoticiaCard from '../components/NoticiaCard.astro';
+import { SECTORES } from '../lib/sectors';
+import { getUltimas, getDestacadas, getPorSector } from '../lib/noticias';
+
+const destacadas = await getDestacadas(1);
+const ultimas = await getUltimas(6);
+
+// Para cada sector, sus noticias más recientes (solo sectores con contenido).
+const bloquesSector = await Promise.all(
+  SECTORES.map(async (s) => ({
+    sector: s,
+    noticias: await getPorSector(s.id, 4),
+  })),
+);
+const sectoresConNoticias = bloquesSector.filter((b) => b.noticias.length > 0);
+---
+
+<BaseLayout titulo="Vision Andalucia — Noticias de Andalucía">
+  {
+    destacadas.length > 0 && (
+      <section class="seccion" aria-label="Destacado">
+        <div class="grid-noticias">
+          <NoticiaCard noticia={destacadas[0]} destacado />
+        </div>
+      </section>
+    )
+  }
+
+  <section class="seccion" aria-labelledby="titulo-ultimas">
+    <div class="seccion__titulo">
+      <h2 id="titulo-ultimas">Últimas novedades</h2>
+      <a href="/rss.xml">Suscribirse (RSS)</a>
+    </div>
+    {
+      ultimas.length > 0 ? (
+        <div class="grid-noticias">
+          {ultimas.map((n) => (
+            <NoticiaCard noticia={n} />
+          ))}
+        </div>
+      ) : (
+        <p>Aún no hay noticias publicadas. Añade la primera desde el panel <a href="/admin/">/admin</a>.</p>
+      )
+    }
+  </section>
+
+  {
+    sectoresConNoticias.map(({ sector, noticias }) => (
+      <section class="seccion" aria-labelledby={`titulo-${sector.id}`}>
+        <div class="seccion__titulo">
+          <h2 id={`titulo-${sector.id}`}>{sector.label}</h2>
+          <a href={`/sector/${sector.id}/`}>Ver todo</a>
+        </div>
+        <div class="grid-noticias">
+          {noticias.map((n) => (
+            <NoticiaCard noticia={n} />
+          ))}
+        </div>
+      </section>
+    ))
+  }
+</BaseLayout>

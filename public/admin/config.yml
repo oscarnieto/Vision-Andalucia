@@ -1,0 +1,134 @@
+# Configuración de Decap CMS — panel de contenido de Vision Andalucia.
+# Documentación: https://decapcms.org/docs/
+
+# --- Backend (dónde se guardan los cambios) --------------------------------
+# git-gateway funciona con Netlify Identity: los editores inician sesión con
+# email/contraseña y Decap hace commit por ellos, sin tocar Git ni código.
+# Si se despliega en otro sitio, se puede cambiar a backend "github" con OAuth.
+backend:
+  name: git-gateway
+  branch: main
+
+# Permite editar en local con `npx decap-server` (http://localhost:8081)
+# arrancando la web con `npm run dev`. Se ignora en producción.
+local_backend: true
+
+# Carpeta donde Decap sube imágenes/vídeos. Astro copia public/ tal cual,
+# así que quedan servidos en /uploads/...
+media_folder: "public/uploads"
+public_folder: "/uploads"
+
+# Idioma del panel
+locale: "es"
+
+# --- Colecciones (formularios) ---------------------------------------------
+collections:
+  - name: "noticias"
+    label: "Noticias"
+    label_singular: "Noticia"
+    folder: "src/content/noticias"
+    create: true
+    slug: "{{year}}-{{month}}-{{day}}-{{slug}}"
+    # Vista de listado
+    summary: "{{titulo}} — {{fecha | date('DD/MM/YYYY')}}"
+    sortable_fields: ["fecha", "titulo", "sector"]
+    view_filters:
+      - label: "Borradores"
+        field: borrador
+        pattern: true
+      - label: "Destacadas"
+        field: destacada
+        pattern: true
+    fields:
+      - { name: "titulo", label: "Título", widget: "string" }
+      - {
+          name: "resumen",
+          label: "Resumen / entradilla",
+          widget: "text",
+          hint: "Frase breve para tarjetas y buscadores (máx. 300 caracteres).",
+          pattern: ['^.{1,300}$', "Máximo 300 caracteres"],
+        }
+      - {
+          name: "sector",
+          label: "Sector",
+          widget: "select",
+          options:
+            [
+              { label: "Economía", value: "economia" },
+              { label: "Tecnología", value: "tecnologia" },
+              { label: "Turismo", value: "turismo" },
+              { label: "Agroalimentario", value: "agroalimentario" },
+              { label: "Sostenibilidad", value: "sostenibilidad" },
+              { label: "Sociedad", value: "sociedad" },
+            ],
+        }
+      - {
+          name: "tags",
+          label: "Etiquetas / temas",
+          widget: "list",
+          default: [],
+          hint: "Sirven para relacionar noticias entre sí. Ej.: málaga, empleo, IA.",
+        }
+      - {
+          name: "fecha",
+          label: "Fecha de publicación",
+          widget: "datetime",
+          date_format: "DD/MM/YYYY",
+          time_format: "HH:mm",
+          picker_utc: false,
+        }
+      - {
+          name: "fechaActualizacion",
+          label: "Fecha de actualización",
+          widget: "datetime",
+          required: false,
+          date_format: "DD/MM/YYYY",
+          time_format: "HH:mm",
+          picker_utc: false,
+        }
+      - {
+          name: "autor",
+          label: "Autor",
+          widget: "string",
+          default: "Redacción Vision Andalucia",
+        }
+      - {
+          name: "imagen",
+          label: "Imagen de portada",
+          widget: "image",
+          required: false,
+          choose_url: true,
+          hint: "Se muestra en la cabecera del artículo y en las tarjetas.",
+        }
+      - {
+          name: "imagenAlt",
+          label: "Texto alternativo de la imagen",
+          widget: "string",
+          required: false,
+          hint: "Describe la imagen (accesibilidad y SEO).",
+        }
+      - {
+          name: "video",
+          label: "Vídeo (URL)",
+          widget: "string",
+          required: false,
+          hint: "Pega el enlace de YouTube, Vimeo o un .mp4.",
+        }
+      - {
+          name: "destacada",
+          label: "¿Destacada en portada?",
+          widget: "boolean",
+          default: false,
+        }
+      - {
+          name: "borrador",
+          label: "Borrador (no publicar)",
+          widget: "boolean",
+          default: false,
+        }
+      - {
+          name: "body",
+          label: "Cuerpo del artículo",
+          widget: "markdown",
+          hint: "Texto completo. Admite subtítulos, negritas, listas, imágenes y citas.",
+        }

@@ -1,0 +1,107 @@
+/*
+ * Estilos globales base de Vision Andalucia.
+ * Neutros a propósito: se ajustarán cuando lleguen los diseños de Figma.
+ * Todo el theming pasa por estas variables.
+ */
+:root {
+  --color-fondo: #ffffff;
+  --color-texto: #1a1a1a;
+  --color-texto-suave: #5a5a5a;
+  --color-primario: #0b6b4f; /* verde Andalucía (provisional) */
+  --color-primario-oscuro: #084d39;
+  --color-borde: #e6e6e6;
+  --color-superficie: #f7f7f5;
+
+  --fuente-titulos: 'Georgia', 'Times New Roman', serif;
+  --fuente-texto: system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif;
+
+  --ancho-max: 1140px;
+  --radio: 8px;
+  --espacio: 1rem;
+}
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+html {
+  font-family: var(--fuente-texto);
+  color: var(--color-texto);
+  background: var(--color-fondo);
+  line-height: 1.6;
+  -webkit-text-size-adjust: 100%;
+}
+
+body {
+  margin: 0;
+}
+
+h1,
+h2,
+h3,
+h4 {
+  font-family: var(--fuente-titulos);
+  line-height: 1.2;
+  margin: 0 0 0.5em;
+}
+
+a {
+  color: var(--color-primario);
+  text-decoration: none;
+}
+
+a:hover {
+  text-decoration: underline;
+}
+
+img {
+  max-width: 100%;
+  height: auto;
+  display: block;
+}
+
+.contenedor {
+  width: 100%;
+  max-width: var(--ancho-max);
+  margin-inline: auto;
+  padding-inline: var(--espacio);
+}
+
+.seccion {
+  margin-block: 3rem;
+}
+
+.seccion__titulo {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 1rem;
+  border-bottom: 3px solid var(--color-primario);
+  padding-bottom: 0.5rem;
+  margin-bottom: 1.5rem;
+}
+
+.seccion__titulo h2 {
+  margin: 0;
+  font-size: 1.5rem;
+}
+
+.grid-noticias {
+  display: grid;
+  gap: 1.5rem;
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+}
+
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
+}

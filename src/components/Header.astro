@@ -1,0 +1,66 @@
+---
+import { SECTORES } from '../lib/sectors';
+---
+
+<header class="cabecera">
+  <div class="contenedor cabecera__inner">
+    <a href="/" class="cabecera__logo">
+      Vision<span>Andalucia</span>
+    </a>
+    <nav aria-label="Sectores">
+      <ul class="cabecera__nav">
+        {
+          SECTORES.map((s) => (
+            <li>
+              <a href={`/sector/${s.id}/`}>{s.label}</a>
+            </li>
+          ))
+        }
+      </ul>
+    </nav>
+  </div>
+</header>
+
+<style>
+  .cabecera {
+    border-bottom: 1px solid var(--color-borde);
+    background: var(--color-fondo);
+    position: sticky;
+    top: 0;
+    z-index: 10;
+  }
+  .cabecera__inner {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1.5rem;
+    padding-block: 0.75rem;
+    flex-wrap: wrap;
+  }
+  .cabecera__logo {
+    font-family: var(--fuente-titulos);
+    font-weight: 700;
+    font-size: 1.5rem;
+    color: var(--color-texto);
+    text-decoration: none;
+  }
+  .cabecera__logo span {
+    color: var(--color-primario);
+  }
+  .cabecera__nav {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 1rem 1.25rem;
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    font-size: 0.95rem;
+  }
+  .cabecera__nav a {
+    color: var(--color-texto-suave);
+  }
+  .cabecera__nav a:hover {
+    color: var(--color-primario);
+    text-decoration: none;
+  }
+</style>

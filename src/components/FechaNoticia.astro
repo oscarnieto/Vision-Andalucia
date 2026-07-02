@@ -1,0 +1,25 @@
+---
+interface Props {
+  fecha: Date;
+  prefijo?: string;
+}
+const { fecha, prefijo } = Astro.props;
+
+const iso = fecha.toISOString();
+const legible = new Intl.DateTimeFormat('es-ES', {
+  day: 'numeric',
+  month: 'long',
+  year: 'numeric',
+}).format(fecha);
+---
+
+<time class="fecha" datetime={iso}>
+  {prefijo && <span>{prefijo} </span>}{legible}
+</time>
+
+<style>
+  .fecha {
+    font-size: 0.8rem;
+    color: var(--color-texto-suave);
+  }
+</style>
