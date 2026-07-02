@@ -1,15 +1,14 @@
 /**
- * Sectores (categorías principales) de Vision Andalucia.
+ * Sectores (categorías principales) de Visión Andalucía.
  *
  * Fuente única de la verdad para:
  *   - el esquema de contenido (src/content/config.ts)
- *   - los listados de la home
- *   - la navegación
+ *   - la barra de navegación
+ *   - los listados
  *
  * IMPORTANTE: si añades/renombras un sector aquí, replica el mismo `id`
  * y `label` en /public/admin/config.yml (campo "sector") para que Decap CMS
- * muestre las mismas opciones. Son dos ficheros distintos por decisión de
- * diseño: Astro no puede importar TS dentro del YAML del CMS.
+ * muestre las mismas opciones.
  */
 export interface Sector {
   id: string;
@@ -19,34 +18,44 @@ export interface Sector {
 
 export const SECTORES = [
   {
-    id: 'economia',
-    label: 'Economía',
-    descripcion: 'Actualidad económica, empresas y mercados en Andalucía.',
+    id: 'residencial',
+    label: 'Residencial',
+    descripcion: 'Mercado de vivienda: obra nueva, segunda mano e inversión.',
   },
   {
-    id: 'tecnologia',
-    label: 'Tecnología',
-    descripcion: 'Innovación, digitalización y ecosistema tecnológico.',
+    id: 'living',
+    label: 'Living',
+    descripcion: 'Build to rent, coliving, residencias de estudiantes y senior living.',
   },
   {
-    id: 'turismo',
-    label: 'Turismo',
-    descripcion: 'Sector turístico, hostelería y cultura.',
+    id: 'retail',
+    label: 'Retail',
+    descripcion: 'Centros comerciales, high street y locales comerciales.',
   },
   {
-    id: 'agroalimentario',
-    label: 'Agroalimentario',
-    descripcion: 'Agricultura, ganadería e industria alimentaria.',
+    id: 'oficinas',
+    label: 'Oficinas',
+    descripcion: 'Mercado de oficinas y espacios de trabajo.',
   },
   {
-    id: 'sostenibilidad',
-    label: 'Sostenibilidad',
-    descripcion: 'Energía, medio ambiente y transición ecológica.',
+    id: 'hoteles',
+    label: 'Hoteles',
+    descripcion: 'Inversión hotelera y sector turístico.',
   },
   {
-    id: 'sociedad',
-    label: 'Sociedad',
-    descripcion: 'Actualidad social, formación y empleo.',
+    id: 'industrial',
+    label: 'Industrial & Logistics',
+    descripcion: 'Naves logísticas, industriales y last mile.',
+  },
+  {
+    id: 'agribusiness',
+    label: 'Agribusiness',
+    descripcion: 'Suelo rústico, explotaciones agrícolas e inversión agroindustrial.',
+  },
+  {
+    id: 'tendencias',
+    label: 'Tendencias del sector',
+    descripcion: 'Análisis, informes y tendencias del mercado inmobiliario.',
   },
 ] as const satisfies readonly Sector[];
 

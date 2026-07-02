@@ -54,13 +54,22 @@ collections:
           widget: "select",
           options:
             [
-              { label: "Economía", value: "economia" },
-              { label: "Tecnología", value: "tecnologia" },
-              { label: "Turismo", value: "turismo" },
-              { label: "Agroalimentario", value: "agroalimentario" },
-              { label: "Sostenibilidad", value: "sostenibilidad" },
-              { label: "Sociedad", value: "sociedad" },
+              { label: "Residencial", value: "residencial" },
+              { label: "Living", value: "living" },
+              { label: "Retail", value: "retail" },
+              { label: "Oficinas", value: "oficinas" },
+              { label: "Hoteles", value: "hoteles" },
+              { label: "Industrial & Logistics", value: "industrial" },
+              { label: "Agribusiness", value: "agribusiness" },
+              { label: "Tendencias del sector", value: "tendencias" },
             ],
+        }
+      - {
+          name: "categoria",
+          label: "Categoría (tag amarillo)",
+          widget: "string",
+          required: false,
+          hint: "Texto del tag sobre el titular. Si se deja vacío se usa el sector. Ej.: Residencial obra nueva.",
         }
       - {
           name: "tags",
@@ -90,7 +99,14 @@ collections:
           name: "autor",
           label: "Autor",
           widget: "string",
-          default: "Redacción Vision Andalucia",
+          default: "Redacción Visión Andalucía",
+        }
+      - {
+          name: "autorCargo",
+          label: "Cargo del autor",
+          widget: "string",
+          required: false,
+          hint: "Segunda línea bajo el nombre. Ej.: Director Residential Sales, Savills Andalucía.",
         }
       - {
           name: "imagen",

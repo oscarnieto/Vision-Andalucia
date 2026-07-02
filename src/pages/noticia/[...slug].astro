@@ -2,7 +2,6 @@
 import BaseLayout from '../../layouts/BaseLayout.astro';
 import NoticiaCard from '../../components/NoticiaCard.astro';
 import VideoEmbed from '../../components/VideoEmbed.astro';
-import FechaNoticia from '../../components/FechaNoticia.astro';
 import { getNoticias, getRelacionadas } from '../../lib/noticias';
 import { sectorLabel } from '../../lib/sectors';
 
@@ -17,167 +16,253 @@ export async function getStaticPaths() {
 const { noticia } = Astro.props;
 const { data } = noticia;
 const { Content } = await noticia.render();
-const relacionadas = await getRelacionadas(noticia, 3);
+const relacionadas = await getRelacionadas(noticia, 6);
+
+const etiqueta = (data.categoria ?? sectorLabel(data.sector)).toUpperCase();
+
+// Fecha con el formato del diseño: "1 Julio 2026"
+const fechaLegible = (() => {
+  const d = data.fecha;
+  const mes = new Intl.DateTimeFormat('es-ES', { month: 'long' }).format(d);
+  const mesCap = mes.charAt(0).toUpperCase() + mes.slice(1);
+  return `${d.getDate()} ${mesCap} ${d.getFullYear()}`;
+})();
 ---
 
-<BaseLayout
-  titulo={data.titulo}
-  descripcion={data.resumen}
-  tipo="article"
->
-  <article class="articulo">
-    <header class="articulo__cabecera">
-      <a href={`/sector/${data.sector}/`} class="articulo__sector">
-        {sectorLabel(data.sector)}
-      </a>
-      <h1 class="articulo__titulo">{data.titulo}</h1>
-      <p class="articulo__resumen">{data.resumen}</p>
-      <div class="articulo__meta">
-        <span>{data.autor}</span>
-        <FechaNoticia fecha={data.fecha} />
-        {
-          data.fechaActualizacion && (
-            <FechaNoticia fecha={data.fechaActualizacion} prefijo="Act." />
-          )
-        }
+<BaseLayout titulo={data.titulo} descripcion={data.resumen} tipo="article" imagen={data.imagen}>
+  <article class="entrada">
+    <!-- Cabecera centrada -->
+    <header class="entrada__head contenedor">
+      <span class="tag" data-reveal>{etiqueta}</span>
+
+      <h1 class="entrada__titulo" data-reveal style="--reveal-delay:80ms">
+        {data.titulo}
+      </h1>
+
+      <div class="entrada__autor" data-reveal style="--reveal-delay:160ms">
+        <p class="entrada__autor-nombre">{data.autor}</p>
+        {data.autorCargo && <p class="entrada__autor-cargo">{data.autorCargo}</p>}
       </div>
+
+      <time class="entrada__fecha" datetime={data.fecha.toISOString()} data-reveal style="--reveal-delay:220ms">
+        {fechaLegible}
+      </time>
     </header>
 
+    <!-- Imagen de cabecera a todo el ancho -->
     {
-      data.imagen && (
-        <figure class="articulo__portada">
+      data.imagen ? (
+        <figure class="entrada__portada full-bleed" data-reveal>
           <img src={data.imagen} alt={data.imagenAlt} />
-          {data.imagenAlt && <figcaption>{data.imagenAlt}</figcaption>}
         </figure>
+      ) : (
+        <div class="entrada__portada entrada__portada--vacia full-bleed" data-reveal aria-hidden="true" />
       )
     }
 
-    {data.video && <VideoEmbed url={data.video} titulo={data.titulo} />}
+    <!-- Cuerpo -->
+    <div class="entrada__cuerpo contenedor">
+      <p class="entrada__lead" data-reveal>{data.resumen}</p>
 
-    <div class="articulo__cuerpo prosa">
-      <Content />
+      {data.video && (
+        <div data-reveal>
+          <VideoEmbed url={data.video} titulo={data.titulo} />
+        </div>
+      )}
+
+      <div class="prosa" data-reveal>
+        <Content />
+      </div>
+
+      {
+        data.tags.length > 0 && (
+          <ul class="entrada__tags" data-reveal>
+            {data.tags.map((t) => (
+              <li>
+                <a href={`/tag/${encodeURIComponent(t)}/`}>#{t}</a>
+              </li>
+            ))}
+          </ul>
+        )
+      }
     </div>
 
+    <!-- Noticias relacionadas -->
     {
-      data.tags.length > 0 && (
-        <ul class="articulo__tags" aria-label="Etiquetas">
-          {data.tags.map((t) => (
-            <li>
-              <a href={`/tag/${encodeURIComponent(t)}/`}>#{t}</a>
-            </li>
-          ))}
-        </ul>
+      relacionadas.length > 0 && (
+        <section class="relacionadas contenedor" aria-labelledby="rel-titulo">
+          <h2 id="rel-titulo" class="relacionadas__titulo" data-reveal>
+            Noticias relacionadas
+          </h2>
+          <div class="relacionadas__grid">
+            {relacionadas.map((n, i) => (
+              <div data-reveal style={`--reveal-delay:${i * 90}ms`}>
+                <NoticiaCard noticia={n} />
+              </div>
+            ))}
+          </div>
+        </section>
       )
     }
   </article>
-
-  {
-    relacionadas.length > 0 && (
-      <section class="seccion" aria-labelledby="titulo-relacionadas">
-        <div class="seccion__titulo">
-          <h2 id="titulo-relacionadas">Noticias relacionadas</h2>
-        </div>
-        <div class="grid-noticias">
-          {relacionadas.map((n) => (
-            <NoticiaCard noticia={n} />
-          ))}
-        </div>
-      </section>
-    )
-  }
 </BaseLayout>
 
 <style>
-  .articulo {
-    max-width: 760px;
-    margin-inline: auto;
-    margin-block: 2rem;
+  .entrada__head {
+    text-align: center;
+    padding-top: clamp(2rem, 5vw, 3.75rem);
   }
-  .articulo__sector {
+
+  /* Tag amarillo */
+  .tag {
+    display: inline-block;
+    background: var(--color-acento);
+    color: var(--color-texto);
+    font-weight: 600;
     font-size: 0.8rem;
+    letter-spacing: 0.02em;
+    padding: 0.35em 0.9em;
+    line-height: 1;
+  }
+
+  .entrada__titulo {
+    font-family: var(--fuente-titulos);
+    font-weight: 400;
+    font-size: clamp(1.9rem, 5vw, 3.125rem);
+    line-height: 1.05;
+    max-width: 966px;
+    margin: 1.5rem auto 0;
+  }
+
+  .entrada__autor {
+    margin-top: clamp(1.75rem, 4vw, 2.5rem);
+  }
+  .entrada__autor-nombre {
     font-weight: 700;
+    font-size: 1rem;
     text-transform: uppercase;
-    letter-spacing: 0.06em;
-    color: var(--color-primario);
+    letter-spacing: 0.02em;
+    margin: 0;
   }
-  .articulo__titulo {
-    font-size: clamp(1.8rem, 4vw, 2.8rem);
-    margin: 0.5rem 0;
+  .entrada__autor-cargo {
+    font-size: 0.8125rem;
+    margin: 0.15rem 0 0;
   }
-  .articulo__resumen {
-    font-size: 1.2rem;
-    color: var(--color-texto-suave);
-    margin: 0 0 1rem;
+
+  .entrada__fecha {
+    display: block;
+    margin-top: 0.75rem;
+    font-weight: 500;
+    font-size: 0.75rem;
   }
-  .articulo__meta {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 0.25rem 1rem;
-    align-items: center;
-    padding-block: 1rem;
-    border-top: 1px solid var(--color-borde);
-    border-bottom: 1px solid var(--color-borde);
-    font-size: 0.85rem;
-    color: var(--color-texto-suave);
+
+  /* Imagen de cabecera full-bleed */
+  .entrada__portada {
+    margin: clamp(2rem, 4vw, 2.75rem) 0 0;
+    height: clamp(240px, 40vw, 578px);
+    overflow: hidden;
   }
-  .articulo__portada {
+  .entrada__portada img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+  .entrada__portada--vacia {
+    background: var(--color-card);
+  }
+
+  /* Cuerpo */
+  .entrada__cuerpo {
+    margin-top: clamp(2.5rem, 5vw, 4rem);
+    max-width: calc(1140px + var(--margen-lateral) * 2);
+  }
+  .entrada__lead {
+    font-family: var(--fuente-texto);
+    font-weight: 700;
+    font-size: clamp(1.35rem, 3vw, 2rem);
+    line-height: 1.35;
+    margin: 0 0 1.5rem;
+  }
+
+  .prosa {
+    font-size: 1rem;
+    line-height: 1.7;
+  }
+  .prosa :global(p) {
+    margin: 0 0 1.2rem;
+  }
+  .prosa :global(h2) {
+    font-family: var(--fuente-texto);
+    font-weight: 700;
+    font-size: 1.15rem;
+    margin: 2rem 0 0.4rem;
+  }
+  .prosa :global(h3) {
+    font-family: var(--fuente-texto);
+    font-weight: 700;
+    font-size: 1.05rem;
+    margin: 1.6rem 0 0.4rem;
+  }
+  .prosa :global(strong) {
+    font-weight: 700;
+  }
+  .prosa :global(img) {
     margin: 1.5rem 0;
   }
-  .articulo__portada :global(img) {
-    width: 100%;
-    height: auto;
-    border-radius: var(--radio);
+  .prosa :global(blockquote) {
+    border-left: 3px solid var(--color-acento);
+    margin: 1.5rem 0;
+    padding-left: 1rem;
+    font-style: italic;
   }
-  .articulo__portada figcaption {
-    font-size: 0.8rem;
-    color: var(--color-texto-suave);
-    margin-top: 0.5rem;
-  }
-  .articulo__tags {
+
+  .entrada__tags {
     display: flex;
     flex-wrap: wrap;
     gap: 0.5rem;
     list-style: none;
     padding: 0;
-    margin: 2rem 0 0;
+    margin: 2.5rem 0 0;
   }
-  .articulo__tags a {
+  .entrada__tags a {
     display: inline-block;
-    padding: 0.25rem 0.7rem;
-    background: var(--color-superficie);
+    padding: 0.3rem 0.75rem;
+    border: 1px solid var(--color-borde-suave);
     border-radius: 999px;
-    font-size: 0.85rem;
+    font-size: 0.8rem;
+    transition: border-color 0.2s ease, background 0.2s ease;
   }
-  .articulo__tags a:hover {
-    text-decoration: none;
-    background: var(--color-borde);
+  .entrada__tags a:hover {
+    border-color: var(--color-texto);
+    background: var(--color-superficie);
   }
 
-  /* Tipografía del cuerpo del artículo */
-  .prosa {
-    font-size: 1.1rem;
-    line-height: 1.75;
+  /* Relacionadas */
+  .relacionadas {
+    margin-top: clamp(3rem, 6vw, 5rem);
   }
-  .prosa :global(h2) {
-    margin-top: 2rem;
-    font-size: 1.6rem;
+  .relacionadas__titulo {
+    font-family: var(--fuente-texto);
+    font-weight: 600;
+    font-size: 1.375rem;
+    margin: 0 0 1rem;
+    padding-bottom: 1rem;
+    border-bottom: 1px solid var(--color-borde);
   }
-  .prosa :global(h3) {
-    margin-top: 1.5rem;
-    font-size: 1.3rem;
+  .relacionadas__grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 30px;
   }
-  .prosa :global(img) {
-    border-radius: var(--radio);
-    margin-block: 1.5rem;
+
+  @media (max-width: 900px) {
+    .relacionadas__grid {
+      grid-template-columns: repeat(2, 1fr);
+    }
   }
-  .prosa :global(blockquote) {
-    border-left: 4px solid var(--color-primario);
-    margin-inline: 0;
-    padding-left: 1rem;
-    color: var(--color-texto-suave);
-    font-style: italic;
-  }
-  .prosa :global(figure) {
-    margin-inline: 0;
+  @media (max-width: 560px) {
+    .relacionadas__grid {
+      grid-template-columns: 1fr;
+    }
   }
 </style>

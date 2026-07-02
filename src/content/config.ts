@@ -21,12 +21,17 @@ const noticias = defineCollection({
 
     // Clasificación
     sector: z.enum(SECTOR_IDS),
+    // Etiqueta que se muestra en el tag amarillo sobre el titular.
+    // Si se omite, se usa el nombre del sector. Ej.: "Residencial obra nueva".
+    categoria: z.string().optional(),
     tags: z.array(z.string()).default([]),
 
     // Publicación
     fecha: z.coerce.date(),
     fechaActualizacion: z.coerce.date().optional(),
-    autor: z.string().default('Redacción Vision Andalucia'),
+    autor: z.string().default('Redacción Visión Andalucía'),
+    // Cargo del autor (segunda línea bajo el nombre).
+    autorCargo: z.string().optional(),
     destacada: z.boolean().default(false),
     borrador: z.boolean().default(false),
 

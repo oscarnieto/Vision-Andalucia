@@ -1,76 +1,101 @@
 ---
-import { SECTORES } from '../lib/sectors';
 const anio = new Date().getFullYear();
 ---
 
 <footer class="pie">
-  <div class="contenedor pie__inner">
-    <div>
-      <p class="pie__logo">Vision<span>Andalucia</span></p>
-      <p class="pie__nota">
-        Noticias y actualidad de los sectores clave de Andalucía.
-      </p>
+  <div class="contenedor pie__inner" data-reveal>
+    <div class="pie__col pie__logo">
+      <span class="savills">savills</span>
     </div>
-    <nav aria-label="Sectores (pie)">
-      <ul class="pie__nav">
-        {
-          SECTORES.map((s) => (
-            <li>
-              <a href={`/sector/${s.id}/`}>{s.label}</a>
-            </li>
-          ))
-        }
-      </ul>
-    </nav>
+
+    <div class="pie__col">
+      <h2>¿En qué podemos ayudarte?</h2>
+      <p>
+        Calle Marqués de Larios 4, Of.401<br />
+        29005 Málaga · España
+      </p>
+      <p><a href="tel:+34952062782">(+34) 952 06 27 82</a></p>
+    </div>
+
+    <div class="pie__col">
+      <h2><a href="/que-es-vision/">¿Qué es visión?</a></h2>
+    </div>
+
+    <div class="pie__col">
+      <h2><a href="https://www.savills.es" target="_blank" rel="noopener">Savills.es</a></h2>
+    </div>
   </div>
-  <div class="contenedor pie__legal">
-    <span>© {anio} Vision Andalucia</span>
-    <a href="/rss.xml">RSS</a>
+
+  <div class="contenedor pie__legal" data-reveal>
+    <p>
+      Desde hace 170 años, Savills ayuda a las personas a prosperar a través de
+      lugares y espacios. Cotizada en la Bolsa de Londres, cuenta con más de
+      42.000 profesionales en más de 70 países.
+    </p>
+    <p>
+      Este documento tiene un fin meramente informativo. Savills no se hace
+      responsable de cualquier pérdida o perjuicio, directo o indirecto,
+      derivado de su uso. Quedan reservados todos los derechos. © {anio}
+      Savills.
+    </p>
   </div>
 </footer>
 
 <style>
   .pie {
+    background: var(--color-acento);
+    color: var(--color-texto);
+    padding-block: 2.75rem 1.75rem;
     margin-top: 4rem;
-    border-top: 1px solid var(--color-borde);
-    background: var(--color-superficie);
-    padding-block: 2.5rem 1.5rem;
   }
   .pie__inner {
-    display: flex;
-    flex-wrap: wrap;
-    justify-content: space-between;
-    gap: 2rem;
-  }
-  .pie__logo {
-    font-family: var(--fuente-titulos);
-    font-weight: 700;
-    font-size: 1.25rem;
-    margin: 0;
-  }
-  .pie__logo span {
-    color: var(--color-primario);
-  }
-  .pie__nota {
-    color: var(--color-texto-suave);
-    margin: 0.25rem 0 0;
-    max-width: 32ch;
-  }
-  .pie__nav {
     display: grid;
-    grid-template-columns: repeat(2, auto);
-    gap: 0.5rem 1.5rem;
-    list-style: none;
-    margin: 0;
-    padding: 0;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 1.5rem 2rem;
+    align-items: start;
+  }
+  .pie__col h2 {
+    font-family: var(--fuente-texto);
+    font-weight: 700;
+    font-size: 1.15rem;
+    margin: 0 0 0.6rem;
+  }
+  .pie__col p {
+    margin: 0 0 0.5rem;
+    font-size: 0.8rem;
+    line-height: 1.5;
+  }
+  .pie__col a {
+    text-decoration: none;
+  }
+  .pie__col a:hover {
+    text-decoration: underline;
+  }
+  .savills {
+    font-family: var(--fuente-titulos);
+    font-size: 1.9rem;
+    font-weight: 700;
+    letter-spacing: 0.02em;
   }
   .pie__legal {
-    display: flex;
-    justify-content: space-between;
-    margin-top: 2rem;
-    padding-top: 1rem;
-    border-top: 1px solid var(--color-borde);
-    font-size: 0.85rem;
-    color: var(--color-texto-suave);
+    margin-top: 2.5rem;
+  }
+  .pie__legal p {
+    font-size: 0.62rem;
+    line-height: 1.5;
+    color: #1a1a1a;
+    margin: 0 0 0.5rem;
+    max-width: 100%;
+  }
+
+  @media (max-width: 780px) {
+    .pie__inner {
+      grid-template-columns: 1fr 1fr;
+    }
+  }
+  @media (max-width: 460px) {
+    .pie__inner {
+      grid-template-columns: 1fr;
+    }
   }
 </style>

@@ -5,32 +5,65 @@ import { getNoticias } from '../../lib/noticias';
 
 export async function getStaticPaths() {
   const noticias = await getNoticias();
-  const tags = new Map<string, string>(); // slug -> etiqueta original
+  const tags = new Set<string>();
   for (const n of noticias) {
-    for (const t of n.data.tags) tags.set(t, t);
+    for (const t of n.data.tags) tags.add(t);
   }
-  return [...tags.keys()].map((t) => ({
+  return [...tags].map((t) => ({
     params: { tag: t },
     props: { tag: t },
   }));
 }
 
 const { tag } = Astro.props;
-const noticias = (await getNoticias()).filter((n) =>
-  n.data.tags.includes(tag),
-);
+const noticias = (await getNoticias()).filter((n) => n.data.tags.includes(tag));
 ---
 
 <BaseLayout
   titulo={`#${tag}`}
-  descripcion={`Noticias etiquetadas con ${tag} en Vision Andalucia.`}
+  descripcion={`Noticias etiquetadas con ${tag} en Visión Andalucía.`}
 >
-  <div class="seccion">
-    <div class="seccion__titulo">
-      <h2>#{tag}</h2>
-    </div>
-    <div class="grid-noticias">
-      {noticias.map((n) => <NoticiaCard noticia={n} />)}
+  <div class="contenedor pagina">
+    <header class="cab" data-reveal>
+      <h1>#{tag}</h1>
+    </header>
+    <div class="rejilla">
+      {
+        noticias.map((n, i) => (
+          <div data-reveal style={`--reveal-delay:${(i % 3) * 90}ms`}>
+            <NoticiaCard noticia={n} />
+          </div>
+        ))
+      }
     </div>
   </div>
 </BaseLayout>
+
+<style>
+  .pagina {
+    padding-top: clamp(2rem, 5vw, 3rem);
+  }
+  .cab {
+    margin-bottom: 2rem;
+  }
+  .cab h1 {
+    font-family: var(--fuente-titulos);
+    font-size: clamp(1.8rem, 4vw, 2.75rem);
+    margin: 0;
+  }
+  .rejilla {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 30px;
+  }
+  @media (max-width: 900px) {
+    .rejilla {
+      grid-template-columns: repeat(2, 1fr);
+    }
+  }
+  @media (max-width: 560px) {
+    .rejilla {
+      grid-template-columns: 1fr;
+    }
+  }
+</style>

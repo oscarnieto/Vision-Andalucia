@@ -14,31 +14,58 @@ const noticias = await getPorSector(sectorId!);
 ---
 
 <BaseLayout titulo={sector.label} descripcion={sector.descripcion}>
-  <div class="seccion">
-    <div class="seccion__titulo">
-      <h2>{sector.label}</h2>
-    </div>
-    <p class="sector__desc">{sector.descripcion}</p>
+  <div class="contenedor pagina">
+    <header class="cab" data-reveal>
+      <h1>{sector.label}</h1>
+      <p>{sector.descripcion}</p>
+    </header>
 
     {
       noticias.length > 0 ? (
-        <div class="grid-noticias">
-          {noticias.map((n) => (
-            <NoticiaCard noticia={n} />
+        <div class="rejilla">
+          {noticias.map((n, i) => (
+            <div data-reveal style={`--reveal-delay:${(i % 3) * 90}ms`}>
+              <NoticiaCard noticia={n} />
+            </div>
           ))}
         </div>
       ) : (
-        <p>Todavía no hay noticias en este sector.</p>
+        <p data-reveal>Todavía no hay noticias en este sector.</p>
       )
     }
   </div>
 </BaseLayout>
 
 <style>
-  .sector__desc {
+  .pagina {
+    padding-top: clamp(2rem, 5vw, 3rem);
+  }
+  .cab {
+    margin-bottom: 2rem;
+  }
+  .cab h1 {
+    font-family: var(--fuente-titulos);
+    font-size: clamp(1.8rem, 4vw, 2.75rem);
+    margin: 0 0 0.5rem;
+  }
+  .cab p {
     color: var(--color-texto-suave);
-    margin-top: -0.75rem;
-    margin-bottom: 1.5rem;
     max-width: 60ch;
+    margin: 0;
+  }
+  .rejilla {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 30px;
+  }
+  @media (max-width: 900px) {
+    .rejilla {
+      grid-template-columns: repeat(2, 1fr);
+    }
+  }
+  @media (max-width: 560px) {
+    .rejilla {
+      grid-template-columns: 1fr;
+    }
   }
 </style>

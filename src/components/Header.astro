@@ -3,12 +3,29 @@ import { SECTORES } from '../lib/sectors';
 ---
 
 <header class="cabecera">
-  <div class="contenedor cabecera__inner">
-    <a href="/" class="cabecera__logo">
-      Vision<span>Andalucia</span>
-    </a>
-    <nav aria-label="Sectores">
-      <ul class="cabecera__nav">
+  <div class="cabecera__linea">
+    <div class="contenedor cabecera__barra">
+      <a href="/" class="logo" aria-label="Visión Andalucía — inicio">
+        <span class="logo__marca">Visión</span>
+        <span class="logo__sep" aria-hidden="true"></span>
+        <span class="logo__region">Andalucía</span>
+      </a>
+
+      <button
+        class="burger"
+        type="button"
+        aria-label="Abrir menú"
+        aria-expanded="false"
+        aria-controls="menu-movil"
+      >
+        <span></span><span></span><span></span>
+      </button>
+    </div>
+  </div>
+
+  <div class="cabecera__linea cabecera__linea--nav">
+    <nav class="contenedor cabecera__nav" aria-label="Sectores">
+      <ul>
         {
           SECTORES.map((s) => (
             <li>
@@ -19,48 +36,173 @@ import { SECTORES } from '../lib/sectors';
       </ul>
     </nav>
   </div>
+
+  <nav id="menu-movil" class="menu-movil" aria-label="Sectores (móvil)" hidden>
+    <ul>
+      {
+        SECTORES.map((s) => (
+          <li>
+            <a href={`/sector/${s.id}/`}>{s.label}</a>
+          </li>
+        ))
+      }
+    </ul>
+  </nav>
 </header>
 
 <style>
   .cabecera {
-    border-bottom: 1px solid var(--color-borde);
     background: var(--color-fondo);
-    position: sticky;
-    top: 0;
-    z-index: 10;
   }
-  .cabecera__inner {
+  .cabecera__linea {
+    border-bottom: 1px solid var(--color-borde);
+  }
+
+  .cabecera__barra {
     display: flex;
     align-items: center;
     justify-content: space-between;
-    gap: 1.5rem;
-    padding-block: 0.75rem;
-    flex-wrap: wrap;
+    gap: 1rem;
+    min-height: 60px;
   }
-  .cabecera__logo {
-    font-family: var(--fuente-titulos);
+
+  /* ---- Logo (wordmark) ---- */
+  .logo {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.6rem;
+    font-family: var(--fuente-texto);
+    text-transform: uppercase;
+    letter-spacing: 0.14em;
+    font-size: clamp(0.85rem, 2.5vw, 1.1rem);
+    line-height: 1;
+  }
+  .logo__marca {
     font-weight: 700;
-    font-size: 1.5rem;
-    color: var(--color-texto);
-    text-decoration: none;
   }
-  .cabecera__logo span {
-    color: var(--color-primario);
+  .logo__region {
+    font-weight: 400;
   }
-  .cabecera__nav {
+  .logo__sep {
+    width: 1px;
+    height: 1.1em;
+    background: var(--color-borde);
+  }
+
+  /* ---- Barra de sectores (desktop) ---- */
+  .cabecera__linea--nav {
+    display: none;
+  }
+  .cabecera__nav ul {
     display: flex;
+    justify-content: center;
     flex-wrap: wrap;
-    gap: 1rem 1.25rem;
+    gap: 1.75rem;
     list-style: none;
     margin: 0;
-    padding: 0;
-    font-size: 0.95rem;
+    padding: 0.7rem 0;
   }
   .cabecera__nav a {
-    color: var(--color-texto-suave);
+    position: relative;
+    font-size: 0.8rem;
+    color: var(--color-texto);
+    padding-bottom: 2px;
   }
-  .cabecera__nav a:hover {
-    color: var(--color-primario);
-    text-decoration: none;
+  /* Efecto hover: subrayado que crece desde el centro */
+  .cabecera__nav a::after {
+    content: '';
+    position: absolute;
+    left: 50%;
+    bottom: 0;
+    width: 0;
+    height: 1.5px;
+    background: var(--color-texto);
+    transition:
+      width 0.28s ease,
+      left 0.28s ease;
+  }
+  .cabecera__nav a:hover::after,
+  .cabecera__nav a:focus-visible::after {
+    left: 0;
+    width: 100%;
+  }
+
+  /* ---- Botón hamburguesa ---- */
+  .burger {
+    display: inline-flex;
+    flex-direction: column;
+    justify-content: center;
+    gap: 5px;
+    width: 30px;
+    height: 24px;
+    padding: 0;
+    background: none;
+    border: 0;
+    cursor: pointer;
+  }
+  .burger span {
+    display: block;
+    height: 2px;
+    width: 100%;
+    background: var(--color-texto);
+    transition: transform 0.3s ease, opacity 0.2s ease;
+  }
+  .burger[aria-expanded='true'] span:nth-child(1) {
+    transform: translateY(7px) rotate(45deg);
+  }
+  .burger[aria-expanded='true'] span:nth-child(2) {
+    opacity: 0;
+  }
+  .burger[aria-expanded='true'] span:nth-child(3) {
+    transform: translateY(-7px) rotate(-45deg);
+  }
+
+  /* ---- Menú móvil desplegable ---- */
+  .menu-movil {
+    border-bottom: 1px solid var(--color-borde);
+  }
+  .menu-movil[hidden] {
+    display: none;
+  }
+  .menu-movil ul {
+    list-style: none;
+    margin: 0;
+    padding: 0.5rem var(--margen-lateral) 1rem;
+  }
+  .menu-movil li {
+    border-top: 1px solid var(--color-borde-suave);
+  }
+  .menu-movil li:first-child {
+    border-top: 0;
+  }
+  .menu-movil a {
+    display: block;
+    padding: 0.85rem 0;
+    font-size: 0.95rem;
+  }
+
+  /* En pantallas grandes: barra de sectores visible, hamburguesa oculta */
+  @media (min-width: 1024px) {
+    .cabecera__linea--nav {
+      display: block;
+    }
+    .burger {
+      display: none;
+    }
+    .menu-movil {
+      display: none !important;
+    }
   }
 </style>
+
+<script>
+  const burger = document.querySelector<HTMLButtonElement>('.burger');
+  const menu = document.getElementById('menu-movil');
+
+  burger?.addEventListener('click', () => {
+    const abierto = burger.getAttribute('aria-expanded') === 'true';
+    burger.setAttribute('aria-expanded', String(!abierto));
+    burger.setAttribute('aria-label', abierto ? 'Abrir menú' : 'Cerrar menú');
+    if (menu) menu.hidden = abierto;
+  });
+</script>
