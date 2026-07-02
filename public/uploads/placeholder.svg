@@ -1,0 +1,17 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 800" preserveAspectRatio="xMidYMid slice" role="img" aria-label="Imagen no disponible">
+  <defs>
+    <linearGradient id="pg" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#e9edf1"/>
+      <stop offset="1" stop-color="#c4cdd6"/>
+    </linearGradient>
+  </defs>
+  <rect width="1200" height="800" fill="url(#pg)"/>
+  <g fill="#ffffff" opacity="0.7">
+    <rect x="250" y="380" width="150" height="180"/>
+    <rect x="430" y="330" width="150" height="230"/>
+    <rect x="610" y="400" width="150" height="160"/>
+    <rect x="790" y="350" width="150" height="210"/>
+  </g>
+  <text x="600" y="230" text-anchor="middle" font-family="'Playfair Display', Georgia, serif" font-size="56" fill="#8a97a4">Visión Andalucía</text>
+  <text x="600" y="285" text-anchor="middle" font-family="Montserrat, sans-serif" font-size="24" letter-spacing="2" fill="#9aa6b2">IMAGEN NO DISPONIBLE</text>
+</svg>

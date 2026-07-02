@@ -50,15 +50,9 @@ const fechaLegible = (() => {
     </header>
 
     <!-- Imagen de cabecera a todo el ancho -->
-    {
-      data.imagen ? (
-        <figure class="entrada__portada full-bleed" data-reveal>
-          <img src={data.imagen} alt={data.imagenAlt} />
-        </figure>
-      ) : (
-        <div class="entrada__portada entrada__portada--vacia full-bleed" data-reveal aria-hidden="true" />
-      )
-    }
+    <figure class="entrada__portada full-bleed" data-reveal>
+      <img src={data.imagen ?? '/uploads/placeholder.svg'} alt={data.imagenAlt} />
+    </figure>
 
     <!-- Cuerpo -->
     <div class="entrada__cuerpo contenedor">
@@ -97,7 +91,7 @@ const fechaLegible = (() => {
           <div class="relacionadas__grid">
             {relacionadas.map((n, i) => (
               <div data-reveal style={`--reveal-delay:${i * 90}ms`}>
-                <NoticiaCard noticia={n} />
+                <NoticiaCard noticia={n} maxCaracteres={12} />
               </div>
             ))}
           </div>

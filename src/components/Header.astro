@@ -59,9 +59,10 @@ import { SECTORES } from '../lib/sectors';
   }
 
   .cabecera__barra {
+    position: relative;
     display: flex;
     align-items: center;
-    justify-content: space-between;
+    justify-content: center;
     gap: 1rem;
     min-height: 60px;
   }
@@ -129,6 +130,10 @@ import { SECTORES } from '../lib/sectors';
 
   /* ---- Botón hamburguesa ---- */
   .burger {
+    position: absolute;
+    right: 0;
+    top: 50%;
+    transform: translateY(-50%);
     display: inline-flex;
     flex-direction: column;
     justify-content: center;

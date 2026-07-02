@@ -4,28 +4,29 @@ import { sectorLabel } from '../lib/sectors';
 
 interface Props {
   noticia: Noticia;
+  /** Si se indica, recorta el título a ese nº de caracteres y añade "…". */
+  maxCaracteres?: number;
 }
 
-const { noticia } = Astro.props;
+const { noticia, maxCaracteres } = Astro.props;
 const { data, slug } = noticia;
 const url = `/noticia/${slug}/`;
 const etiqueta = (data.categoria ?? sectorLabel(data.sector)).toUpperCase();
+const imagen = data.imagen ?? '/uploads/placeholder.svg';
+const tituloVisible =
+  maxCaracteres && data.titulo.length > maxCaracteres
+    ? data.titulo.slice(0, maxCaracteres).trimEnd() + '…'
+    : data.titulo;
 ---
 
 <a class="card" href={url}>
   <div class="card__media">
-    {
-      data.imagen ? (
-        <img src={data.imagen} alt={data.imagenAlt} loading="lazy" />
-      ) : (
-        <span class="card__placeholder" aria-hidden="true" />
-      )
-    }
+    <img src={imagen} alt={data.imagenAlt} loading="lazy" />
   </div>
   <div class="card__grad" aria-hidden="true"></div>
   <div class="card__cuerpo">
     <span class="card__cat">{etiqueta}</span>
-    <h3 class="card__titulo">{data.titulo}</h3>
+    <h3 class="card__titulo" title={data.titulo}>{tituloVisible}</h3>
     <span class="card__autor">{data.autor}</span>
   </div>
 </a>
