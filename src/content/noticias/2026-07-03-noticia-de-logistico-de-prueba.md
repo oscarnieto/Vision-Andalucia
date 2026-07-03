@@ -7,7 +7,7 @@ sector: industrial
 categoria: Industrial & Logistics
 tags:
   - Industrial & Logistics
-fecha: 03/07/2026T11:20
+fecha: 2026-07-03T11:20:00
 autor: Oscar Nieto
 autorCargo: Brand designer
 imagen: /uploads/cover-1.jpg
