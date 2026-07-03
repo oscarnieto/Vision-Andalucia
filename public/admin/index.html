@@ -101,6 +101,93 @@
             : 'iframe (sin URL)';
         },
       });
+
+      /* ---- Previsualización con el diseño real de la web ---- */
+
+      // Tipografías y estilos del sitio dentro del panel de preview
+      CMS.registerPreviewStyle(
+        'https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700&family=Playfair+Display:ital,wght@0,400;0,500;0,700;1,400&display=swap'
+      );
+      CMS.registerPreviewStyle('/admin/preview.css');
+
+      var SECTOR_LABELS = {
+        residencial: 'Residencial',
+        living: 'Living',
+        retail: 'Retail',
+        oficinas: 'Oficinas',
+        hoteles: 'Hoteles',
+        industrial: 'Industrial & Logistics',
+        agribusiness: 'Agribusiness',
+        tendencias: 'Tendencias del sector',
+      };
+      var MESES = ['Enero','Febrero','Marzo','Abril','Mayo','Junio','Julio','Agosto','Septiembre','Octubre','Noviembre','Diciembre'];
+
+      var NoticiaPreview = createClass({
+        render: function () {
+          var entry = this.props.entry;
+          var data = entry.get('data');
+          var getAsset = this.props.getAsset;
+
+          var titulo = data.get('titulo') || '';
+          var resumen = data.get('resumen') || '';
+          var sector = data.get('sector') || '';
+          var categoria = data.get('categoria');
+          var autor = data.get('autor') || '';
+          var autorCargo = data.get('autorCargo');
+          var fecha = data.get('fecha');
+          var imagen = data.get('imagen');
+          var video = data.get('video');
+
+          var etiqueta = String(categoria || SECTOR_LABELS[sector] || sector).toUpperCase();
+
+          var fechaTxt = '';
+          if (fecha) {
+            var d = new Date(fecha);
+            if (!isNaN(d.getTime())) {
+              fechaTxt = d.getDate() + ' ' + MESES[d.getMonth()] + ' ' + d.getFullYear();
+            }
+          }
+
+          var imgSrc = imagen ? getAsset(imagen) : '/uploads/placeholder.svg';
+
+          var videoEl = null;
+          if (video) {
+            var id = youtubeId(video);
+            if (id) {
+              videoEl = h('div', { className: 'embed embed--video' },
+                h('iframe', {
+                  src: 'https://www.youtube-nocookie.com/embed/' + id,
+                  frameBorder: '0',
+                  allowFullScreen: true,
+                  title: 'Vídeo',
+                })
+              );
+            }
+          }
+
+          return h('article', { className: 'entrada' },
+            h('header', { className: 'entrada__head contenedor' },
+              h('span', { className: 'tag' }, etiqueta),
+              h('h1', { className: 'entrada__titulo' }, titulo),
+              h('div', { className: 'entrada__autor' },
+                h('p', { className: 'entrada__autor-nombre' }, autor),
+                autorCargo ? h('p', { className: 'entrada__autor-cargo' }, autorCargo) : null
+              ),
+              h('time', { className: 'entrada__fecha' }, fechaTxt)
+            ),
+            h('figure', { className: 'entrada__portada full-bleed' },
+              h('img', { src: imgSrc, alt: data.get('imagenAlt') || '' })
+            ),
+            h('div', { className: 'entrada__cuerpo contenedor' },
+              resumen ? h('p', { className: 'entrada__lead' }, resumen) : null,
+              videoEl,
+              h('div', { className: 'prosa' }, this.props.widgetFor('body'))
+            )
+          );
+        },
+      });
+
+      CMS.registerPreviewTemplate('noticias', NoticiaPreview);
     </script>
   </body>
 </html>
