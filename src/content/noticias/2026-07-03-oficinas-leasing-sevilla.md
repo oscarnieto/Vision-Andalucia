@@ -9,7 +9,7 @@ fecha: 2026-07-03T11:45:00+02:00
 autor: Redacción Visión Andalucía
 autorCargo: Social Media
 imagen: /uploads/planet-volumes-pbnmoqwfqx8-unsplash.jpg
-video: https://www.youtube.com/watch?v=liLGJWv5SXA
+video: ""
 destacada: false
 borrador: false
 ---
