@@ -48,19 +48,61 @@ collections:
   - name: "noticias"
     label: "Noticias"
     label_singular: "Noticia"
+    description: "Todas las noticias del sitio. Usa Ordenar, Filtrar y Agrupar para organizarlas."
+    identifier_field: "titulo"
     folder: "src/content/noticias"
     create: true
     slug: "{{year}}-{{month}}-{{day}}-{{slug}}"
-    # Vista de listado
-    summary: "{{titulo}} — {{fecha | date('DD/MM/YYYY')}}"
-    sortable_fields: ["fecha", "titulo", "sector"]
+    # Enlace "Ver en la web" desde el panel
+    preview_path: "noticia/{{slug}}"
+    # Resumen de cada fila del listado
+    summary: "{{titulo}}  ·  {{fecha | date('DD/MM/YYYY')}}"
+    # Ordenar por…
+    sortable_fields:
+      - fecha
+      - titulo
+      - sector
+      - autor
+    # Filtrar por… (chips)
     view_filters:
-      - label: "Borradores"
-        field: borrador
-        pattern: true
-      - label: "Destacadas"
+      - label: "Sector · Residencial"
+        field: sector
+        pattern: residencial
+      - label: "Sector · Living"
+        field: sector
+        pattern: living
+      - label: "Sector · Retail"
+        field: sector
+        pattern: retail
+      - label: "Sector · Oficinas"
+        field: sector
+        pattern: oficinas
+      - label: "Sector · Hoteles"
+        field: sector
+        pattern: hoteles
+      - label: "Sector · Industrial & Logistics"
+        field: sector
+        pattern: industrial
+      - label: "Sector · Agribusiness"
+        field: sector
+        pattern: agribusiness
+      - label: "Sector · Tendencias"
+        field: sector
+        pattern: tendencias
+      - label: "Solo destacadas"
         field: destacada
         pattern: true
+      - label: "Solo borradores"
+        field: borrador
+        pattern: true
+    # Agrupar por… (categoriza el listado)
+    view_groups:
+      - label: "Sector"
+        field: sector
+      - label: "Autor"
+        field: autor
+      - label: "Estado (borrador)"
+        field: borrador
     fields:
       - { name: "titulo", label: "Título", widget: "string" }
       - {
