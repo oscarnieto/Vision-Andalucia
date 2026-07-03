@@ -1,20 +1,22 @@
 ---
-titulo: "“El precio de la vivienda nueva sube un 15% anual en los últimos cinco años”"
-resumen: "En 2025, el precio medio de la vivienda plurifamiliar se sitúa en 4.846 €/m², con una superficie media de 114 m² y un precio medio por unidad de 613.181 €."
-sector: "residencial"
-categoria: "Residencial obra nueva"
+titulo: “El precio de la vivienda nueva sube un 15% anual en los últimos cinco años”
+resumen: En 2025, el precio medio de la vivienda plurifamiliar se sitúa en 4.846
+  €/m², con una superficie media de 114 m² y un precio medio por unidad de
+  613.181 €.
+sector: residencial
+categoria: Residencial obra nueva
 tags:
   - malaga
   - obra-nueva
   - inversion
 fecha: 2026-07-01T09:00:00.000Z
-autor: "José Luis Bravo"
-autorCargo: "Director Residential Sales, Savills Andalucía"
+autor: José Luis Bravo
+autorCargo: Director Residential Sales, Savills Andalucía
+imagen: /uploads/cover-1.jpg
+imagenAlt: Promoción residencial de obra nueva en Málaga
+video: https://www.youtube.com/watch?v=dQw4w9WgXcQ
 destacada: true
 borrador: false
-imagen: "/uploads/demo-residencial.svg"
-imagenAlt: "Promoción residencial de obra nueva en Málaga"
-video: "https://www.youtube.com/watch?v=dQw4w9WgXcQ"
 ---
 
 El mercado residencial en Málaga ha experimentado un crecimiento exponencial en
