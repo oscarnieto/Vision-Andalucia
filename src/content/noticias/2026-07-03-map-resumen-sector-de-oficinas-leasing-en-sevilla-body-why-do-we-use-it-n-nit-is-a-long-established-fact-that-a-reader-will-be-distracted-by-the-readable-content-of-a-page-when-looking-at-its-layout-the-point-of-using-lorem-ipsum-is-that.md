@@ -32,5 +32,3 @@ It is a long established fact that a reader will be distracted by the readable c
 ### GRÁFICO DE EJEMPLO
 
 <div class="embed"><iframe src="https://infogram.com/inversion-1t2026-1hnq41ojk3mlp23" loading="lazy" frameborder="0" allowfullscreen></iframe></div>
-
-position: relative; width: 100%; height: 0px; padding: 51.77% 0px 0px; overflow: hidden; will-change: transform;"><iframe loading="lazy" src="https://e.infogram.com/4f01a2e6-6f11-40a2-8917-eba198f948d3?src=embed&amp;embed_type=responsive_iframe" title="inversion 1T2026" allowfullscreen="" allow="fullscreen" style="position: absolute; width: 100%; height: 100%; top: 0px; left: 0px; border-width: medium; border-style: none; border-color: currentcolor; border-image: initial; padding: 0px; margin: 0px;"></iframe></div>" loading="lazy" frameborder="0" allowfullscreen></iframe></div>
