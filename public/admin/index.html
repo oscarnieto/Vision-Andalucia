@@ -10,5 +10,97 @@
     <!-- Decap CMS: panel de edición sin código.
          Versión 3.8.3+ requerida por el login PKCE de DecapBridge. -->
     <script src="https://unpkg.com/decap-cms@^3.8.3/dist/decap-cms.js"></script>
+
+    <!-- Bloques personalizados del editor: YouTube e iframe genérico.
+         Se guardan como HTML dentro del Markdown, y Astro los renderiza. -->
+    <script>
+      // Extrae el ID de un vídeo de YouTube desde cualquier formato de URL.
+      function youtubeId(url) {
+        if (!url) return '';
+        var m = url.match(
+          /(?:youtu\.be\/|youtube\.com\/(?:watch\?v=|embed\/|shorts\/|live\/))([\w-]{11})/
+        );
+        if (m) return m[1];
+        return /^[\w-]{11}$/.test(url.trim()) ? url.trim() : '';
+      }
+
+      function youtubeIframe(id) {
+        return (
+          '<div class="embed embed--video"><iframe ' +
+          'src="https://www.youtube-nocookie.com/embed/' + id + '" ' +
+          'title="Vídeo de YouTube" loading="lazy" frameborder="0" ' +
+          'allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" ' +
+          'allowfullscreen></iframe></div>'
+        );
+      }
+
+      // Bloque: Vídeo de YouTube
+      CMS.registerEditorComponent({
+        id: 'youtube',
+        label: 'Vídeo de YouTube',
+        fields: [
+          {
+            name: 'url',
+            label: 'URL o ID de YouTube',
+            widget: 'string',
+            hint: 'Pega el enlace del vídeo (youtube.com/watch?v=… o youtu.be/…).',
+          },
+        ],
+        pattern: /^<div class="embed embed--video"><iframe src="https:\/\/www\.youtube-nocookie\.com\/embed\/([\w-]{11})"/,
+        fromBlock: function (match) {
+          return { url: 'https://youtu.be/' + match[1] };
+        },
+        toBlock: function (obj) {
+          var id = youtubeId(obj.url);
+          return id
+            ? youtubeIframe(id)
+            : '<!-- YouTube: revisa la URL «' + (obj.url || '') + '» -->';
+        },
+        toPreview: function (obj) {
+          var id = youtubeId(obj.url);
+          return id ? youtubeIframe(id) : 'Vídeo de YouTube (URL no válida)';
+        },
+      });
+
+      // Bloque: iframe / embed genérico (mapas, formularios, etc.)
+      CMS.registerEditorComponent({
+        id: 'embed',
+        label: 'Insertar iframe / embed',
+        fields: [
+          {
+            name: 'url',
+            label: 'URL a insertar (src del iframe)',
+            widget: 'string',
+          },
+          {
+            name: 'alto',
+            label: 'Alto en píxeles (opcional)',
+            widget: 'string',
+            required: false,
+            hint: 'Déjalo vacío para formato panorámico 16:9 responsive.',
+          },
+        ],
+        pattern: /^<div class="embed(?:[^"]*)"[^>]*><iframe src="([^"]*)"/,
+        fromBlock: function (match) {
+          return { url: match[1] };
+        },
+        toBlock: function (obj) {
+          if (!obj.url) return '<!-- iframe sin URL -->';
+          var style = obj.alto
+            ? ' style="height:' + parseInt(obj.alto, 10) + 'px"'
+            : '';
+          return (
+            '<div class="embed"' + style + '><iframe ' +
+            'src="' + obj.url + '" loading="lazy" frameborder="0" ' +
+            'allowfullscreen></iframe></div>'
+          );
+        },
+        toPreview: function (obj) {
+          return obj.url
+            ? '<div class="embed"><iframe src="' + obj.url + '" frameborder="0"></iframe></div>'
+            : 'iframe (sin URL)';
+        },
+      });
+    </script>
   </body>
 </html>

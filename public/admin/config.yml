@@ -166,9 +166,23 @@ collections:
           widget: "boolean",
           default: false,
         }
-      - {
-          name: "body",
-          label: "Cuerpo del artículo",
-          widget: "markdown",
-          hint: "Texto completo. Admite subtítulos, negritas, listas, imágenes y citas.",
-        }
+      - name: "body"
+        label: "Cuerpo del artículo"
+        widget: "markdown"
+        hint: "Editor visual. Al hacer clic dentro aparece la barra: títulos, negrita, listas, citas, imágenes, y los bloques de YouTube e iframe (botón +)."
+        # Botones de formato de la barra
+        buttons:
+          - bold
+          - italic
+          - link
+          - heading-two
+          - heading-three
+          - quote
+          - bulleted-list
+          - numbered-list
+        # Bloques insertables con el botón "+": imagen, código y los nuestros
+        editor_components:
+          - image
+          - code-block
+          - youtube
+          - embed
