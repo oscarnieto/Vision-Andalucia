@@ -1,0 +1,157 @@
+/*
+ * Estilos de la previsualización de Decap CMS.
+ * Reproducen el diseño real de la página de artículo para que, al editar,
+ * el panel derecho se vea como quedará publicado.
+ */
+:root {
+  --color-fondo: #ffffff;
+  --color-texto: #000000;
+  --color-texto-suave: #555555;
+  --color-acento: #fdea14;
+  --color-borde: #000000;
+  --color-borde-suave: #e6e6e6;
+  --color-superficie: #f4f4f4;
+  --fuente-titulos: 'Playfair Display', Georgia, serif;
+  --fuente-texto: 'Montserrat', system-ui, sans-serif;
+  --ancho-contenido: 1140px;
+  --margen-lateral: clamp(1rem, 5vw, 3rem);
+}
+
+body {
+  margin: 0;
+  font-family: var(--fuente-texto);
+  color: var(--color-texto);
+  background: var(--color-fondo);
+  line-height: 1.35;
+}
+
+.contenedor {
+  width: 100%;
+  max-width: calc(var(--ancho-contenido) + var(--margen-lateral) * 2);
+  margin-inline: auto;
+  padding-inline: var(--margen-lateral);
+}
+
+/* En la preview neutralizamos el truco full-bleed (no hay viewport real) */
+.full-bleed {
+  width: 100%;
+  margin: 0;
+  transform: none;
+}
+
+.entrada__head {
+  text-align: center;
+  padding-top: 2.5rem;
+}
+.tag {
+  display: inline-block;
+  background: var(--color-acento);
+  color: var(--color-texto);
+  font-weight: 600;
+  font-size: 0.8rem;
+  letter-spacing: 0.02em;
+  padding: 0.35em 0.9em;
+  line-height: 1;
+}
+.entrada__titulo {
+  font-family: var(--fuente-titulos);
+  font-weight: 400;
+  font-size: clamp(1.9rem, 4vw, 3.125rem);
+  line-height: 1.05;
+  max-width: 966px;
+  margin: 1.5rem auto 0;
+}
+.entrada__autor {
+  margin-top: 2rem;
+}
+.entrada__autor-nombre {
+  font-weight: 700;
+  font-size: 1rem;
+  text-transform: uppercase;
+  letter-spacing: 0.02em;
+  margin: 0;
+}
+.entrada__autor-cargo {
+  font-size: 0.8125rem;
+  margin: 0.15rem 0 0;
+}
+.entrada__fecha {
+  display: block;
+  margin-top: 0.75rem;
+  font-weight: 500;
+  font-size: 0.75rem;
+}
+
+.entrada__portada {
+  margin: 2.5rem 0 0;
+  height: clamp(240px, 38vw, 520px);
+  overflow: hidden;
+}
+.entrada__portada img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+
+.entrada__cuerpo {
+  margin-top: 3rem;
+  padding-bottom: 4rem;
+}
+.entrada__lead {
+  font-weight: 700;
+  font-size: clamp(1.35rem, 2.5vw, 2rem);
+  line-height: 1.35;
+  margin: 0 0 1.5rem;
+}
+
+.prosa {
+  font-size: 1rem;
+  line-height: 1.7;
+}
+.prosa p {
+  margin: 0 0 1.2rem;
+}
+.prosa h1,
+.prosa h2 {
+  font-family: var(--fuente-texto);
+  font-weight: 700;
+  font-size: 1.15rem;
+  margin: 2rem 0 0.4rem;
+}
+.prosa h3 {
+  font-family: var(--fuente-texto);
+  font-weight: 700;
+  font-size: 1.05rem;
+  margin: 1.6rem 0 0.4rem;
+}
+.prosa strong {
+  font-weight: 700;
+}
+.prosa img {
+  max-width: 100%;
+  height: auto;
+  margin: 1.5rem 0;
+}
+.prosa blockquote {
+  border-left: 3px solid var(--color-acento);
+  margin: 1.5rem 0;
+  padding-left: 1rem;
+  font-style: italic;
+}
+
+/* Embeds (YouTube / iframe) dentro del contenido */
+.embed {
+  position: relative;
+  aspect-ratio: 16 / 9;
+  margin: 1.5rem 0;
+  background: #000;
+  overflow: hidden;
+}
+.embed iframe {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  border: 0;
+}
