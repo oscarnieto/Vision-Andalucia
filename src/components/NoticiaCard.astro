@@ -83,7 +83,8 @@ const imagen = data.imagen ?? '/uploads/placeholder.svg';
     font-family: var(--fuente-titulos);
     font-weight: 400;
     font-size: 1.35rem;
-    line-height: 1.05;
+    /* Interlineado con hueco para los rasgos descendentes (g, p, í...) */
+    line-height: 1.2;
     margin: 0;
     color: #fff;
     /* Máximo 2 líneas; el resto se recorta con "…" */
@@ -92,6 +93,8 @@ const imagen = data.imagen ?? '/uploads/placeholder.svg';
     -webkit-line-clamp: 2;
     line-clamp: 2;
     overflow: hidden;
+    /* Un pelín de aire para que overflow:hidden no roce los descendentes */
+    padding-bottom: 0.08em;
   }
   .card__autor {
     font-weight: 500;
