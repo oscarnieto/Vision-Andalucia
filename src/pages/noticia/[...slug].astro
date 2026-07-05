@@ -91,7 +91,7 @@ const fechaLegible = (() => {
           <div class="relacionadas__grid">
             {relacionadas.map((n, i) => (
               <div data-reveal style={`--reveal-delay:${i * 90}ms`}>
-                <NoticiaCard noticia={n} maxCaracteres={12} />
+                <NoticiaCard noticia={n} />
               </div>
             ))}
           </div>
