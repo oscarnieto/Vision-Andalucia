@@ -201,6 +201,7 @@ collections:
           label: "¿Destacada en portada?",
           widget: "boolean",
           default: false,
+          hint: "Si se activa, esta noticia sale como card grande al inicio de la home. Si marcas varias, se usa la más reciente.",
         }
       - {
           name: "borrador",
@@ -228,3 +229,51 @@ collections:
           - code-block
           - youtube
           - embed
+
+  # --- Inicio: banner editable (un único elemento) -------------------------
+  - name: "inicio"
+    label: "Inicio"
+    description: "Elementos de la página de inicio."
+    files:
+      - name: "banner"
+        label: "Banner de inicio"
+        file: "src/data/banner.json"
+        description: "Banner a todo el ancho con texto y botón."
+        fields:
+          - {
+              name: "activo",
+              label: "Mostrar el banner",
+              widget: "boolean",
+              default: true,
+              hint: "Desactívalo para ocultar el banner sin borrar su contenido.",
+            }
+          - {
+              name: "imagen",
+              label: "Imagen de fondo",
+              widget: "image",
+              hint: "Se muestra a todo el ancho de la pantalla.",
+            }
+          - {
+              name: "imagenAlt",
+              label: "Texto alternativo de la imagen",
+              widget: "string",
+              required: false,
+            }
+          - {
+              name: "texto",
+              label: "Texto",
+              widget: "text",
+            }
+          - {
+              name: "botonTexto",
+              label: "Texto del botón",
+              widget: "string",
+              default: "Ver más",
+            }
+          - {
+              name: "botonUrl",
+              label: "Enlace del botón",
+              widget: "string",
+              default: "/",
+              hint: "Ruta interna (p. ej. /sector/residencial/) o URL completa (https://...).",
+            }

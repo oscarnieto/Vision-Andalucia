@@ -1,0 +1,8 @@
+{
+  "activo": true,
+  "imagen": "/uploads/banner-ejemplo.svg",
+  "imagenAlt": "",
+  "texto": "Lorem ipsum es un texto de relleno estándar utilizado en diseño gráfico, editorial y web para previsualizar maquetas y tipografías antes de insertar el contenido definitivo.",
+  "botonTexto": "Ver más",
+  "botonUrl": "/sector/residencial/"
+}

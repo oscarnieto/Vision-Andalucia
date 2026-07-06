@@ -69,11 +69,13 @@ img {
   padding-inline: var(--margen-lateral);
 }
 
-/* Elemento a todo el ancho del viewport (header image, footer, líneas). */
+/* Elemento a todo el ancho del viewport (header image, banner...).
+   Basado solo en márgenes (sin transform) para no chocar con las
+   animaciones on-scroll, que sí usan transform. */
 .full-bleed {
   width: 100vw;
-  margin-left: 50%;
-  transform: translateX(-50%);
+  margin-left: calc(50% - 50vw);
+  margin-right: calc(50% - 50vw);
 }
 
 .sr-only {

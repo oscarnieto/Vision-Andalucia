@@ -1,0 +1,108 @@
+---
+import type { Noticia } from '../lib/noticias';
+import { sectorLabel } from '../lib/sectors';
+
+interface Props {
+  noticia: Noticia;
+}
+
+const { noticia } = Astro.props;
+const { data, slug } = noticia;
+const url = `/noticia/${slug}/`;
+const etiqueta = (data.categoria ?? sectorLabel(data.sector)).toUpperCase();
+const imagen = data.imagen ?? '/uploads/placeholder.svg';
+---
+
+<a class="destacada" href={url}>
+  <div class="destacada__media">
+    <img src={imagen} alt={data.imagenAlt} />
+  </div>
+  <div class="destacada__grad" aria-hidden="true"></div>
+  <div class="destacada__cuerpo">
+    <span class="destacada__cat">{etiqueta}</span>
+    <h2 class="destacada__titulo">{data.titulo}</h2>
+    <span class="destacada__autor">{data.autor}</span>
+  </div>
+</a>
+
+<style>
+  .destacada {
+    position: relative;
+    display: block;
+    width: 100%;
+    height: clamp(320px, 26vw, 380px);
+    overflow: hidden;
+    background: var(--color-card);
+    color: #fff;
+    isolation: isolate;
+  }
+  .destacada__media {
+    position: absolute;
+    inset: 0;
+    z-index: 0;
+  }
+  .destacada__media img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition:
+      transform 0.6s ease-in-out,
+      filter 0.6s ease-in-out;
+  }
+  .destacada__grad {
+    position: absolute;
+    inset: 0;
+    z-index: 1;
+    background: linear-gradient(
+      to bottom,
+      rgba(0, 0, 0, 0) 38%,
+      rgba(0, 0, 0, 0.87) 91%
+    );
+  }
+  .destacada__cuerpo {
+    position: absolute;
+    inset: auto 0 0 0;
+    z-index: 2;
+    padding: 24px;
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+  }
+  .destacada__cat {
+    font-weight: 600;
+    font-size: 0.75rem;
+    letter-spacing: 0.02em;
+    color: var(--color-acento);
+  }
+  .destacada__titulo {
+    font-family: var(--fuente-titulos);
+    font-weight: 400;
+    font-size: clamp(1.35rem, 2.4vw, 1.75rem);
+    line-height: 1.15;
+    margin: 0;
+    color: #fff;
+    max-width: 70ch;
+    display: -webkit-box;
+    -webkit-box-orient: vertical;
+    -webkit-line-clamp: 2;
+    line-clamp: 2;
+    overflow: hidden;
+    padding-bottom: 0.08em;
+  }
+  .destacada__autor {
+    font-weight: 500;
+    font-size: 0.85rem;
+    color: #fff;
+  }
+
+  /* Hover: solo se amplía y oscurece la imagen */
+  .destacada:hover .destacada__media img,
+  .destacada:focus-visible .destacada__media img {
+    transform: scale(1.08);
+    filter: brightness(0.72);
+  }
+  .destacada:focus-visible {
+    outline: 3px solid var(--color-acento);
+    outline-offset: 2px;
+  }
+</style>
