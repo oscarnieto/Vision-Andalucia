@@ -24,16 +24,22 @@ let tarjetas = [] as Awaited<ReturnType<typeof getPorSlugs>>;
 if (data.modo === 'manual') {
   tarjetas = await getPorSlugs(data.noticias);
 } else {
-  // Modo "filtro": se aplican (Y lógico) los filtros que estén puestos.
+  // Modo "filtro": dentro de cada filtro O (cualquiera); entre filtros Y.
   let items = await getNoticias();
-  if (data.filtroSector)
-    items = items.filter((n) => n.data.sector === data.filtroSector);
-  if (data.filtroCiudad)
-    items = items.filter((n) => n.data.ciudad === data.filtroCiudad);
-  if (data.filtroAno)
-    items = items.filter((n) => n.data.fecha.getFullYear() === data.filtroAno);
-  if (data.filtroTag)
-    items = items.filter((n) => n.data.tags.includes(data.filtroTag!));
+  if (data.filtroSector.length)
+    items = items.filter((n) => data.filtroSector.includes(n.data.sector));
+  if (data.filtroCiudad.length)
+    items = items.filter(
+      (n) => n.data.ciudad && data.filtroCiudad.includes(n.data.ciudad),
+    );
+  if (data.filtroAno.length)
+    items = items.filter((n) =>
+      data.filtroAno.includes(n.data.fecha.getFullYear()),
+    );
+  if (data.filtroTag.length)
+    items = items.filter((n) =>
+      n.data.tags.some((t) => data.filtroTag.includes(t)),
+    );
   tarjetas = items.slice(0, data.limite);
 }
 ---

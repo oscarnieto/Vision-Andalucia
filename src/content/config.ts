@@ -108,14 +108,19 @@ const paginas = defineCollection({
 
     // --- Selección de contenido para la rejilla de tarjetas ---
     // modo "manual"  -> se usa la lista `noticias` (slugs, en orden).
-    // modo "filtro"  -> se combinan (Y lógico) los filtros que estén puestos:
-    //                   sector, ciudad, año (de la fecha) y/o etiqueta.
+    // modo "filtro"  -> cada filtro admite VARIOS valores. Dentro de un filtro
+    //                   se aplica O (cualquiera de los elegidos); entre filtros
+    //                   distintos se aplica Y (deben cumplirse todos).
     modo: z.enum(['manual', 'filtro']).default('manual'),
     noticias: z.array(z.string()).default([]), // slugs (modo manual)
-    filtroSector: z.enum(SECTOR_IDS).optional(),
-    filtroCiudad: opcionalTexto,
-    filtroAno: z.coerce.number().optional(), // año de publicación
-    filtroTag: opcionalTexto,
+    filtroSector: z.array(z.string()).default([]),
+    filtroCiudad: z.array(z.string()).default([]),
+    filtroAno: z.preprocess(
+      (v) =>
+        Array.isArray(v) ? v.filter((x) => x !== '' && x != null) : v,
+      z.array(z.coerce.number()).default([]),
+    ),
+    filtroTag: z.array(z.string()).default([]),
     limite: z.coerce.number().default(6), // modo filtro
     tituloSeccion: opcionalTexto, // título opcional sobre la rejilla
   }),
