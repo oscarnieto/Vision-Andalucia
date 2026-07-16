@@ -43,6 +43,11 @@ public_folder: "/uploads"
 # Idioma del panel
 locale: "es"
 
+# Genera slugs (URLs) limpios: sin acentos ni caracteres raros.
+slug:
+  encoding: "ascii"
+  clean_accents: true
+
 # --- Colecciones (formularios) ---------------------------------------------
 collections:
   - name: "noticias"
@@ -258,6 +263,7 @@ collections:
     folder: "src/content/paginas"
     create: true
     slug: "{{slug}}"
+    preview_path: "informe/{{slug}}"
     summary: "{{titulo}}"
     fields:
       - {
