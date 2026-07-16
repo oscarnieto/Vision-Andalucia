@@ -230,6 +230,141 @@ collections:
           - youtube
           - embed
 
+  # --- Páginas / Landings (informes) ---------------------------------------
+  - name: "paginas"
+    label: "Páginas"
+    label_singular: "Página"
+    description: "Landings tipo informe: hero + texto + rejilla de noticias. Se publican en /informe/…"
+    identifier_field: "titulo"
+    folder: "src/content/paginas"
+    create: true
+    slug: "{{slug}}"
+    summary: "{{titulo}}"
+    fields:
+      - {
+          name: "titulo",
+          label: "Título (define la URL)",
+          widget: "string",
+          hint: "La página se publica en /informe/[versión-del-título].",
+        }
+      - {
+          name: "borrador",
+          label: "Borrador (no publicar)",
+          widget: "boolean",
+          default: false,
+        }
+      - {
+          name: "fecha",
+          label: "Fecha",
+          widget: "datetime",
+          required: false,
+          format: "YYYY-MM-DDTHH:mm:ssZ",
+          date_format: "DD/MM/YYYY",
+          time_format: "HH:mm",
+          picker_utc: false,
+        }
+      # --- Hero ---
+      - {
+          name: "heroImagen",
+          label: "Hero · Imagen de fondo",
+          widget: "image",
+          required: false,
+          hint: "Imagen grande de cabecera, a todo el ancho.",
+        }
+      - {
+          name: "heroImagenAlt",
+          label: "Hero · Texto alternativo de la imagen",
+          widget: "string",
+          required: false,
+        }
+      - {
+          name: "etiqueta",
+          label: "Hero · Etiqueta (pastilla amarilla)",
+          widget: "string",
+          required: false,
+          hint: "Ej.: 25 aniversario. Se deja vacío para no mostrarla.",
+        }
+      - { name: "titular", label: "Hero · Titular", widget: "string" }
+      - {
+          name: "autor",
+          label: "Hero · Autor",
+          widget: "string",
+          required: false,
+        }
+      - {
+          name: "autorCargo",
+          label: "Hero · Cargo del autor",
+          widget: "string",
+          required: false,
+        }
+      # --- Texto introductorio ---
+      - {
+          name: "entradilla",
+          label: "Entradilla (texto grande en negrita)",
+          widget: "text",
+          required: false,
+        }
+      - {
+          name: "body",
+          label: "Texto introductorio (cuerpo)",
+          widget: "markdown",
+          required: false,
+          hint: "Editor visual, igual que en las noticias.",
+        }
+      # --- Selección de noticias para la rejilla ---
+      - name: "modo"
+        label: "¿Cómo se eligen las noticias de la rejilla?"
+        widget: "select"
+        default: "manual"
+        options:
+          - { label: "Manual (las elijo yo)", value: "manual" }
+          - { label: "Por sector (automático)", value: "sector" }
+          - { label: "Por etiqueta (automático)", value: "tag" }
+      - name: "noticias"
+        label: "Noticias (solo modo Manual)"
+        widget: "relation"
+        collection: "noticias"
+        search_fields: ["titulo"]
+        value_field: "{{slug}}"
+        display_fields: ["titulo"]
+        multiple: true
+        required: false
+        hint: "Busca y añade las noticias en el orden que quieras que aparezcan."
+      - name: "sector"
+        label: "Sector (solo modo Por sector)"
+        widget: "select"
+        required: false
+        options:
+          - { label: "Residencial", value: "residencial" }
+          - { label: "Living", value: "living" }
+          - { label: "Retail", value: "retail" }
+          - { label: "Oficinas", value: "oficinas" }
+          - { label: "Hoteles", value: "hoteles" }
+          - { label: "Industrial & Logistics", value: "industrial" }
+          - { label: "Agribusiness", value: "agribusiness" }
+          - { label: "Tendencias del sector", value: "tendencias" }
+      - {
+          name: "tag",
+          label: "Etiqueta (solo modo Por etiqueta)",
+          widget: "string",
+          required: false,
+        }
+      - {
+          name: "limite",
+          label: "Nº máximo de tarjetas (modos automáticos)",
+          widget: "number",
+          default: 6,
+          value_type: "int",
+          min: 1,
+        }
+      - {
+          name: "tituloSeccion",
+          label: "Título sobre la rejilla",
+          widget: "string",
+          required: false,
+          default: "Noticias relacionadas",
+        }
+
   # --- Inicio: banner editable (un único elemento) -------------------------
   - name: "inicio"
     label: "Inicio"

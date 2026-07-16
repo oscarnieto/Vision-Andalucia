@@ -78,4 +78,41 @@ const noticias = defineCollection({
   }),
 });
 
-export const collections = { noticias };
+/**
+ * Colección de páginas/landings (informes).
+ *
+ * Cada landing es un fichero Markdown en `src/content/paginas/`. Combina un
+ * hero, un texto introductorio y una rejilla de noticias que se eligen
+ * de forma manual o por sector/etiqueta. Se publican en /informe/{slug}/.
+ */
+const paginas = defineCollection({
+  type: 'content',
+  schema: z.object({
+    titulo: z.string(),
+    borrador: z.boolean().default(false),
+    fecha: fechaFlexible.optional(),
+
+    // --- Hero ---
+    heroImagen: opcionalTexto,
+    heroImagenAlt: z.string().default(''),
+    etiqueta: opcionalTexto, // pastilla amarilla (ej. "25 aniversario")
+    titular: z.string(), // h1
+    autor: opcionalTexto,
+    autorCargo: opcionalTexto,
+
+    // --- Texto introductorio ---
+    // La entradilla se muestra grande y en negrita; el cuerpo va en el body.
+    entradilla: opcionalTexto,
+
+    // --- Selección de contenido para la rejilla de tarjetas ---
+    // modo: "manual" -> lista `noticias`; "sector" -> `sector`; "tag" -> `tag`.
+    modo: z.enum(['manual', 'sector', 'tag']).default('manual'),
+    noticias: z.array(z.string()).default([]), // slugs (modo manual)
+    sector: z.enum(SECTOR_IDS).optional(),
+    tag: opcionalTexto,
+    limite: z.coerce.number().default(6), // modos automáticos
+    tituloSeccion: opcionalTexto, // título opcional sobre la rejilla
+  }),
+});
+
+export const collections = { noticias, paginas };

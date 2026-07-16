@@ -40,6 +40,29 @@ export async function getPorSector(
   return typeof limite === 'number' ? filtradas.slice(0, limite) : filtradas;
 }
 
+/** Noticias que llevan una etiqueta concreta. */
+export async function getPorTag(
+  tag: string,
+  limite?: number,
+): Promise<Noticia[]> {
+  const filtradas = (await getNoticias()).filter((n) =>
+    n.data.tags.includes(tag),
+  );
+  return typeof limite === 'number' ? filtradas.slice(0, limite) : filtradas;
+}
+
+/**
+ * Noticias a partir de una lista de slugs, respetando ese orden.
+ * Ignora los slugs que no existan o no sean publicables.
+ */
+export async function getPorSlugs(slugs: string[]): Promise<Noticia[]> {
+  const todas = await getNoticias();
+  const porSlug = new Map(todas.map((n) => [n.slug, n]));
+  return slugs
+    .map((s) => porSlug.get(s))
+    .filter((n): n is Noticia => Boolean(n));
+}
+
 /**
  * Noticias relacionadas con `noticia`.
  * Prioriza coincidencia de tags; completa con las del mismo sector.
