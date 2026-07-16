@@ -12,7 +12,7 @@ const { imagen, imagenAlt = '', etiqueta, titular, autor, autorCargo } =
   Astro.props;
 ---
 
-<section class="hero full-bleed">
+<section class="hero">
   <img class="hero__img" src={imagen} alt={imagenAlt} />
   <div class="hero__grad" aria-hidden="true"></div>
   <div class="hero__contenido contenedor" data-reveal>
@@ -32,6 +32,7 @@ const { imagen, imagenAlt = '', etiqueta, titular, autor, autorCargo } =
 <style>
   .hero {
     position: relative;
+    width: 100%;
     height: clamp(460px, 78vh, 860px);
     overflow: hidden;
     isolation: isolate;
