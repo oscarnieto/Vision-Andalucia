@@ -1,6 +1,7 @@
 ---
 titulo: "El auge del living: build to rent y coliving se consolidan en Málaga"
 resumen: "Los nuevos modelos residenciales en alquiler ganan peso ante la presión de precios y la demanda de flexibilidad."
+ciudad: malaga
 sector: "living"
 categoria: "Living"
 tags:

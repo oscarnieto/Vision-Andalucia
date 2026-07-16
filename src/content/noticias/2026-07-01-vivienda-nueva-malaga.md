@@ -1,6 +1,7 @@
 ---
 titulo: "“El precio de la vivienda nueva sube un 15% anual en los últimos cinco años”"
 resumen: "En 2025, el precio medio de la vivienda plurifamiliar se sitúa en 4.846 €/m², con una superficie media de 114 m² y un precio medio por unidad de 613.181 €."
+ciudad: malaga
 sector: "residencial"
 categoria: "Residencial obra nueva"
 tags:

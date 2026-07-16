@@ -47,6 +47,8 @@ const noticias = defineCollection({
 
     // Clasificación
     sector: z.enum(SECTOR_IDS),
+    // Ciudad (para filtrar y montar landings por ciudad). Opcional.
+    ciudad: opcionalTexto,
     // Etiqueta que se muestra en el tag amarillo sobre el titular.
     // Si se omite, se usa el nombre del sector. Ej.: "Residencial obra nueva".
     categoria: opcionalTexto,
@@ -105,12 +107,16 @@ const paginas = defineCollection({
     entradilla: opcionalTexto,
 
     // --- Selección de contenido para la rejilla de tarjetas ---
-    // modo: "manual" -> lista `noticias`; "sector" -> `sector`; "tag" -> `tag`.
-    modo: z.enum(['manual', 'sector', 'tag']).default('manual'),
+    // modo "manual"  -> se usa la lista `noticias` (slugs, en orden).
+    // modo "filtro"  -> se combinan (Y lógico) los filtros que estén puestos:
+    //                   sector, ciudad, año (de la fecha) y/o etiqueta.
+    modo: z.enum(['manual', 'filtro']).default('manual'),
     noticias: z.array(z.string()).default([]), // slugs (modo manual)
-    sector: z.enum(SECTOR_IDS).optional(),
-    tag: opcionalTexto,
-    limite: z.coerce.number().default(6), // modos automáticos
+    filtroSector: z.enum(SECTOR_IDS).optional(),
+    filtroCiudad: opcionalTexto,
+    filtroAno: z.coerce.number().optional(), // año de publicación
+    filtroTag: opcionalTexto,
+    limite: z.coerce.number().default(6), // modo filtro
     tituloSeccion: opcionalTexto, // título opcional sobre la rejilla
   }),
 });

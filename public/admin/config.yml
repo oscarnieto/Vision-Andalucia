@@ -129,6 +129,25 @@ collections:
             ],
         }
       - {
+          name: "ciudad",
+          label: "Ciudad",
+          widget: "select",
+          required: false,
+          hint: "Para filtrar noticias y montar landings por ciudad.",
+          options:
+            [
+              { label: "Málaga", value: "malaga" },
+              { label: "Sevilla", value: "sevilla" },
+              { label: "Córdoba", value: "cordoba" },
+              { label: "Granada", value: "granada" },
+              { label: "Cádiz", value: "cadiz" },
+              { label: "Almería", value: "almeria" },
+              { label: "Huelva", value: "huelva" },
+              { label: "Jaén", value: "jaen" },
+              { label: "Marbella", value: "marbella" },
+            ],
+        }
+      - {
           name: "categoria",
           label: "Categoría (tag amarillo)",
           widget: "string",
@@ -317,9 +336,8 @@ collections:
         widget: "select"
         default: "manual"
         options:
-          - { label: "Manual (las elijo yo)", value: "manual" }
-          - { label: "Por sector (automático)", value: "sector" }
-          - { label: "Por etiqueta (automático)", value: "tag" }
+          - { label: "Manual (las elijo yo, una a una)", value: "manual" }
+          - { label: "Por filtros (sector / ciudad / año / etiqueta)", value: "filtro" }
       - name: "noticias"
         label: "Noticias (solo modo Manual)"
         widget: "relation"
@@ -330,8 +348,8 @@ collections:
         multiple: true
         required: false
         hint: "Busca y añade las noticias en el orden que quieras que aparezcan."
-      - name: "sector"
-        label: "Sector (solo modo Por sector)"
+      - name: "filtroSector"
+        label: "Filtro · Sector (solo modo Por filtros)"
         widget: "select"
         required: false
         options:
@@ -343,15 +361,37 @@ collections:
           - { label: "Industrial & Logistics", value: "industrial" }
           - { label: "Agribusiness", value: "agribusiness" }
           - { label: "Tendencias del sector", value: "tendencias" }
+      - name: "filtroCiudad"
+        label: "Filtro · Ciudad (solo modo Por filtros)"
+        widget: "select"
+        required: false
+        options:
+          - { label: "Málaga", value: "malaga" }
+          - { label: "Sevilla", value: "sevilla" }
+          - { label: "Córdoba", value: "cordoba" }
+          - { label: "Granada", value: "granada" }
+          - { label: "Cádiz", value: "cadiz" }
+          - { label: "Almería", value: "almeria" }
+          - { label: "Huelva", value: "huelva" }
+          - { label: "Jaén", value: "jaen" }
+          - { label: "Marbella", value: "marbella" }
       - {
-          name: "tag",
-          label: "Etiqueta (solo modo Por etiqueta)",
+          name: "filtroAno",
+          label: "Filtro · Año (solo modo Por filtros)",
+          widget: "number",
+          required: false,
+          value_type: "int",
+          hint: "Año de publicación de la noticia. Ej.: 2026.",
+        }
+      - {
+          name: "filtroTag",
+          label: "Filtro · Etiqueta (solo modo Por filtros)",
           widget: "string",
           required: false,
         }
       - {
           name: "limite",
-          label: "Nº máximo de tarjetas (modos automáticos)",
+          label: "Nº máximo de tarjetas (modo Por filtros)",
           widget: "number",
           default: 6,
           value_type: "int",
