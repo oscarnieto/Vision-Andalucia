@@ -1,11 +1,23 @@
 ---
+import { getCollection } from 'astro:content';
 import BaseLayout from '../layouts/BaseLayout.astro';
 import NoticiaCard from '../components/NoticiaCard.astro';
 import CardDestacada from '../components/CardDestacada.astro';
+import LandingCard from '../components/LandingCard.astro';
 import Banner from '../components/Banner.astro';
 import { SECTORES } from '../lib/sectors';
 import { getNoticias, getDestacadas, getPorSector } from '../lib/noticias';
 import banner from '../data/banner.json';
+
+// --- Landings publicadas (se muestran grandes al inicio) ---
+const landings = (
+  await getCollection('paginas', (p) =>
+    import.meta.env.PROD ? !p.data.borrador : true,
+  )
+).sort(
+  (a, b) =>
+    (b.data.fecha?.valueOf() ?? 0) - (a.data.fecha?.valueOf() ?? 0),
+);
 
 // --- Últimas novedades ---
 const destacada = (await getDestacadas(1))[0]; // se oculta si no hay ninguna
@@ -25,6 +37,16 @@ const bloquesSector = (
 ---
 
 <BaseLayout titulo="Visión Andalucía — Actualidad inmobiliaria">
+  {landings.length > 0 && (
+    <div class="contenedor landings">
+      {landings.map((p) => (
+        <div class="landings__item" data-reveal>
+          <LandingCard pagina={p} />
+        </div>
+      ))}
+    </div>
+  )}
+
   <div class="contenedor">
     <!-- Últimas novedades -->
     <section class="seccion" aria-labelledby="novedades">
@@ -88,6 +110,12 @@ const bloquesSector = (
 </BaseLayout>
 
 <style>
+  .landings {
+    margin-top: clamp(2rem, 4vw, 3rem);
+    display: flex;
+    flex-direction: column;
+    gap: clamp(1.25rem, 2.5vw, 2rem);
+  }
   .seccion {
     margin-block: clamp(2.5rem, 5vw, 3.5rem);
   }
