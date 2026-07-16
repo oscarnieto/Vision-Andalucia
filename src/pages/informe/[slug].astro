@@ -1,0 +1,138 @@
+---
+import { getCollection } from 'astro:content';
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import LandingHero from '../../components/LandingHero.astro';
+import NoticiaCard from '../../components/NoticiaCard.astro';
+import { getPorSector, getPorTag, getPorSlugs } from '../../lib/noticias';
+
+export async function getStaticPaths() {
+  const paginas = await getCollection('paginas', (p) =>
+    import.meta.env.PROD ? !p.data.borrador : true,
+  );
+  return paginas.map((pagina) => ({
+    params: { slug: pagina.slug },
+    props: { pagina },
+  }));
+}
+
+const { pagina } = Astro.props;
+const { data } = pagina;
+const { Content } = await pagina.render();
+
+// Resolver las tarjetas según el modo elegido en el panel.
+let tarjetas = [] as Awaited<ReturnType<typeof getPorSlugs>>;
+if (data.modo === 'manual') {
+  tarjetas = await getPorSlugs(data.noticias);
+} else if (data.modo === 'sector' && data.sector) {
+  tarjetas = await getPorSector(data.sector, data.limite);
+} else if (data.modo === 'tag' && data.tag) {
+  tarjetas = await getPorTag(data.tag, data.limite);
+}
+---
+
+<BaseLayout titulo={data.titulo} descripcion={data.entradilla} tipo="article" imagen={data.heroImagen}>
+  <LandingHero
+    imagen={data.heroImagen ?? '/uploads/placeholder.svg'}
+    imagenAlt={data.heroImagenAlt}
+    etiqueta={data.etiqueta}
+    titular={data.titular}
+    autor={data.autor}
+    autorCargo={data.autorCargo}
+  />
+
+  <!-- Texto introductorio -->
+  {(data.entradilla || pagina.body?.trim()) && (
+    <div class="contenedor intro">
+      {data.entradilla && <p class="intro__lead" data-reveal>{data.entradilla}</p>}
+      <div class="prosa" data-reveal>
+        <Content />
+      </div>
+    </div>
+  )}
+
+  <!-- Rejilla de tarjetas seleccionadas -->
+  {tarjetas.length > 0 && (
+    <div class="contenedor">
+      <section class="seccion" aria-labelledby="landing-cards">
+        {data.tituloSeccion && (
+          <header class="seccion__cab" data-reveal>
+            <h2 id="landing-cards">{data.tituloSeccion}</h2>
+          </header>
+        )}
+        <div class="rejilla">
+          {tarjetas.map((n, i) => (
+            <div data-reveal style={`--reveal-delay:${(i % 3) * 90}ms`}>
+              <NoticiaCard noticia={n} />
+            </div>
+          ))}
+        </div>
+      </section>
+    </div>
+  )}
+</BaseLayout>
+
+<style>
+  .intro {
+    margin-top: clamp(2.5rem, 5vw, 4rem);
+    max-width: calc(1140px + var(--margen-lateral) * 2);
+  }
+  .intro__lead {
+    font-family: var(--fuente-texto);
+    font-weight: 700;
+    font-size: clamp(1.35rem, 3vw, 2rem);
+    line-height: 1.35;
+    margin: 0 0 1.5rem;
+  }
+  .prosa {
+    font-size: 1rem;
+    line-height: 1.7;
+  }
+  .prosa :global(p) {
+    margin: 0 0 1.2rem;
+  }
+  .prosa :global(h2) {
+    font-family: var(--fuente-texto);
+    font-weight: 700;
+    font-size: 1.15rem;
+    margin: 2rem 0 0.4rem;
+  }
+  .prosa :global(strong) {
+    font-weight: 700;
+  }
+  .prosa :global(img) {
+    margin: 1.5rem 0;
+  }
+  .prosa :global(.embed) {
+    margin: 1.5rem 0;
+  }
+
+  .seccion {
+    margin-block: clamp(2.5rem, 5vw, 4rem);
+  }
+  .seccion__cab {
+    padding-bottom: 1rem;
+    margin-bottom: 1.5rem;
+    border-bottom: 1px solid var(--color-borde);
+  }
+  .seccion__cab h2 {
+    font-family: var(--fuente-texto);
+    font-weight: 600;
+    font-size: 1.375rem;
+    margin: 0;
+  }
+  .rejilla {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 30px;
+  }
+  @media (max-width: 900px) {
+    .rejilla {
+      grid-template-columns: repeat(2, 1fr);
+    }
+  }
+  @media (max-width: 560px) {
+    .rejilla {
+      grid-template-columns: 1fr;
+    }
+  }
+</style>

@@ -1,0 +1,102 @@
+---
+interface Props {
+  imagen: string;
+  imagenAlt?: string;
+  etiqueta?: string;
+  titular: string;
+  autor?: string;
+  autorCargo?: string;
+}
+
+const { imagen, imagenAlt = '', etiqueta, titular, autor, autorCargo } =
+  Astro.props;
+---
+
+<section class="hero full-bleed">
+  <img class="hero__img" src={imagen} alt={imagenAlt} />
+  <div class="hero__grad" aria-hidden="true"></div>
+  <div class="hero__contenido contenedor" data-reveal>
+    {etiqueta && <span class="hero__badge">{etiqueta}</span>}
+    <h1 class="hero__titulo">{titular}</h1>
+    {
+      autor && (
+        <div class="hero__autor">
+          <p class="hero__autor-nombre">{autor}</p>
+          {autorCargo && <p class="hero__autor-cargo">{autorCargo}</p>}
+        </div>
+      )
+    }
+  </div>
+</section>
+
+<style>
+  .hero {
+    position: relative;
+    height: clamp(460px, 78vh, 860px);
+    overflow: hidden;
+    isolation: isolate;
+    color: #fff;
+  }
+  .hero__img {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    z-index: 0;
+  }
+  .hero__grad {
+    position: absolute;
+    inset: 0;
+    z-index: 1;
+    background: linear-gradient(
+      to top,
+      rgba(0, 0, 0, 0.92) 0%,
+      rgba(0, 0, 0, 0.55) 22%,
+      rgba(0, 0, 0, 0) 45%
+    );
+  }
+  .hero__contenido {
+    position: absolute;
+    inset: auto 0 0 0;
+    z-index: 2;
+    padding-bottom: clamp(2rem, 4vw, 3.5rem);
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 1.25rem;
+  }
+  .hero__badge {
+    display: inline-block;
+    background: var(--color-acento);
+    color: #000;
+    font-weight: 700;
+    font-size: clamp(0.85rem, 1.4vw, 1.1rem);
+    text-transform: uppercase;
+    letter-spacing: 0.03em;
+    padding: 0.4em 0.9em;
+    line-height: 1;
+  }
+  .hero__titulo {
+    font-family: var(--fuente-titulos);
+    font-weight: 400;
+    font-size: clamp(1.9rem, 4.5vw, 3.125rem);
+    line-height: 1.08;
+    margin: 0;
+    max-width: 1140px;
+  }
+  .hero__autor-nombre {
+    font-weight: 700;
+    font-size: 1rem;
+    text-transform: uppercase;
+    letter-spacing: 0.02em;
+    margin: 0;
+  }
+  .hero__autor-cargo {
+    font-size: 0.8125rem;
+    text-transform: uppercase;
+    letter-spacing: 0.02em;
+    margin: 0.15rem 0 0;
+    opacity: 0.9;
+  }
+</style>
