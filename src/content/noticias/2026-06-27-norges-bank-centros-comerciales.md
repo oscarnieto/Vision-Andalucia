@@ -1,6 +1,7 @@
 ---
 titulo: "Norges Bank negocia la compra de los centros comerciales de Balkany en España"
 resumen: "El fondo soberano noruego estudia entrar en el retail español con una cartera de activos prime en las principales ciudades."
+ciudad: sevilla
 sector: "retail"
 categoria: "Retail - Centros comerciales"
 tags:

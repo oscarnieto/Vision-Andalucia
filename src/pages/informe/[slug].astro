@@ -3,7 +3,7 @@ import { getCollection } from 'astro:content';
 import BaseLayout from '../../layouts/BaseLayout.astro';
 import LandingHero from '../../components/LandingHero.astro';
 import NoticiaCard from '../../components/NoticiaCard.astro';
-import { getPorSector, getPorTag, getPorSlugs } from '../../lib/noticias';
+import { getNoticias, getPorSlugs } from '../../lib/noticias';
 
 export async function getStaticPaths() {
   const paginas = await getCollection('paginas', (p) =>
@@ -23,10 +23,18 @@ const { Content } = await pagina.render();
 let tarjetas = [] as Awaited<ReturnType<typeof getPorSlugs>>;
 if (data.modo === 'manual') {
   tarjetas = await getPorSlugs(data.noticias);
-} else if (data.modo === 'sector' && data.sector) {
-  tarjetas = await getPorSector(data.sector, data.limite);
-} else if (data.modo === 'tag' && data.tag) {
-  tarjetas = await getPorTag(data.tag, data.limite);
+} else {
+  // Modo "filtro": se aplican (Y lógico) los filtros que estén puestos.
+  let items = await getNoticias();
+  if (data.filtroSector)
+    items = items.filter((n) => n.data.sector === data.filtroSector);
+  if (data.filtroCiudad)
+    items = items.filter((n) => n.data.ciudad === data.filtroCiudad);
+  if (data.filtroAno)
+    items = items.filter((n) => n.data.fecha.getFullYear() === data.filtroAno);
+  if (data.filtroTag)
+    items = items.filter((n) => n.data.tags.includes(data.filtroTag!));
+  tarjetas = items.slice(0, data.limite);
 }
 ---
 
