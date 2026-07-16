@@ -349,9 +349,11 @@ collections:
         required: false
         hint: "Busca y añade las noticias en el orden que quieras que aparezcan."
       - name: "filtroSector"
-        label: "Filtro · Sector (solo modo Por filtros)"
+        label: "Filtro · Sectores (solo modo Por filtros)"
         widget: "select"
+        multiple: true
         required: false
+        hint: "Puedes elegir varios. Se muestran noticias de cualquiera de ellos."
         options:
           - { label: "Residencial", value: "residencial" }
           - { label: "Living", value: "living" }
@@ -362,9 +364,11 @@ collections:
           - { label: "Agribusiness", value: "agribusiness" }
           - { label: "Tendencias del sector", value: "tendencias" }
       - name: "filtroCiudad"
-        label: "Filtro · Ciudad (solo modo Por filtros)"
+        label: "Filtro · Ciudades (solo modo Por filtros)"
         widget: "select"
+        multiple: true
         required: false
+        hint: "Puedes elegir varias."
         options:
           - { label: "Málaga", value: "malaga" }
           - { label: "Sevilla", value: "sevilla" }
@@ -375,20 +379,16 @@ collections:
           - { label: "Huelva", value: "huelva" }
           - { label: "Jaén", value: "jaen" }
           - { label: "Marbella", value: "marbella" }
-      - {
-          name: "filtroAno",
-          label: "Filtro · Año (solo modo Por filtros)",
-          widget: "number",
-          required: false,
-          value_type: "int",
-          hint: "Año de publicación de la noticia. Ej.: 2026.",
-        }
-      - {
-          name: "filtroTag",
-          label: "Filtro · Etiqueta (solo modo Por filtros)",
-          widget: "string",
-          required: false,
-        }
+      - name: "filtroAno"
+        label: "Filtro · Años (solo modo Por filtros)"
+        widget: "list"
+        required: false
+        hint: "Añade uno o varios años de publicación. Ej.: 2025, 2026."
+      - name: "filtroTag"
+        label: "Filtro · Etiquetas (solo modo Por filtros)"
+        widget: "list"
+        required: false
+        hint: "Añade una o varias etiquetas."
       - {
           name: "limite",
           label: "Nº máximo de tarjetas (modo Por filtros)",

@@ -28,6 +28,19 @@ const opcionalTexto = z.preprocess(
 );
 
 /**
+ * Normaliza a lista de forma tolerante: acepta un valor único o una lista
+ * (así conviven las landings antiguas con valor único y las nuevas con varios),
+ * descartando vacíos. `esquema` es el z.array(...) final que valida los items.
+ */
+function aLista<T extends z.ZodTypeAny>(esquema: T) {
+  return z.preprocess((v) => {
+    if (v == null || v === '') return [];
+    const arr = Array.isArray(v) ? v : [v];
+    return arr.filter((x) => x !== '' && x != null);
+  }, esquema);
+}
+
+/**
  * Colección de noticias/artículos.
  *
  * Cada noticia es un fichero Markdown en `src/content/noticias/`.
@@ -108,14 +121,15 @@ const paginas = defineCollection({
 
     // --- Selección de contenido para la rejilla de tarjetas ---
     // modo "manual"  -> se usa la lista `noticias` (slugs, en orden).
-    // modo "filtro"  -> se combinan (Y lógico) los filtros que estén puestos:
-    //                   sector, ciudad, año (de la fecha) y/o etiqueta.
+    // modo "filtro"  -> cada filtro admite VARIOS valores. Dentro de un filtro
+    //                   se aplica O (cualquiera de los elegidos); entre filtros
+    //                   distintos se aplica Y (deben cumplirse todos).
     modo: z.enum(['manual', 'filtro']).default('manual'),
     noticias: z.array(z.string()).default([]), // slugs (modo manual)
-    filtroSector: z.enum(SECTOR_IDS).optional(),
-    filtroCiudad: opcionalTexto,
-    filtroAno: z.coerce.number().optional(), // año de publicación
-    filtroTag: opcionalTexto,
+    filtroSector: aLista(z.array(z.string()).default([])),
+    filtroCiudad: aLista(z.array(z.string()).default([])),
+    filtroAno: aLista(z.array(z.coerce.number()).default([])),
+    filtroTag: aLista(z.array(z.string()).default([])),
     limite: z.coerce.number().default(6), // modo filtro
     tituloSeccion: opcionalTexto, // título opcional sobre la rejilla
   }),
